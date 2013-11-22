@@ -16,8 +16,17 @@
 		"truncate",
 		"htmlsave"
 	],
-	"author": "Ben Zörb",
-	"license": "bezoerb.mit-license.org",
+	"author": {
+		"name": "Ben Zörb",
+		"email": "ben@sommerlaune.com"
+	},
+	"license": "MIT",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "bezoerb.mit-license.org"
+		}
+	],
 	"bugs": {
 		"url": "https://github.com/bezoerb/htmlsave/issues"
 	},
