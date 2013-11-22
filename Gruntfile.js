@@ -54,7 +54,7 @@ module.exports = function (grunt) {
         'saucelabs-jasmine': {
             all: {
                 username: 'bezoerb',
-                key: 'KEY',
+                key: '529c6413-ad40-4d40-ac0a-4d077604d9b2',
                 urls: ['http://localhost:8000/_SpecRunner.html'],
                 browsers: [
                     {"browserName": "iehta", "platform": "Windows 2008", "version": "9"},
