@@ -51,35 +51,6 @@ module.exports = function (grunt) {
                 keepalive: true
             }
         },
-        'saucelabs-jasmine': {
-            all: {
-                username: 'bezoerb',
-                key: '529c6413-ad40-4d40-ac0a-4d077604d9b2',
-                urls: ['http://localhost:8000/_SpecRunner.html'],
-                browsers: [
-                    {"browserName": "iehta", "platform": "Windows 2008", "version": "9"},
-                    // {"browserName": "firefox", "platform": "Windows 2003", "version": "3.0"},
-                    // {"browserName": "firefox", "platform": "Windows 2003", "version": "3.5"},
-                    {"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
-                    {"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
-                    {"browserName": "firefox", "platform": "Windows 2003", "version": "19"},
-                    {"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
-                    {"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
-                    {"browserName": "googlechrome", "platform": "Windows 2003"},
-                    {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
-                    {"browserName": "iehta", "platform": "Windows 2003", "version": "6"},
-                    {"browserName": "iehta", "platform": "Windows 2003", "version": "7"},
-                    {"browserName": "iehta", "platform": "Windows 2008", "version": "8"},
-                ],
-                concurrency: 3,
-                detailedError: true,
-                testTimeout:10000,
-                testInterval:1000,
-                testReadyTimeout:2000,
-                testname: 'loglevel jasmine test',
-                tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
-            }
-        },
         jshint: {
             options: {
                 jshintrc: '.jshintrc'
@@ -130,7 +101,5 @@ module.exports = function (grunt) {
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
 
-    // Test with lots of browsers on saucelabs
-    grunt.registerTask('saucelabs', ['jasmine:src:build', 'connect:test', 'saucelabs-jasmine']);
 
 };
