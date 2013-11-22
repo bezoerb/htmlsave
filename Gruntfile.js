@@ -90,7 +90,6 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks('grunt-saucelabs');
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
