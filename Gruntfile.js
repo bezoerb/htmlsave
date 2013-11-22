@@ -20,7 +20,7 @@ module.exports = function (grunt) {
             dist: {
                 src: ['lib/<%= pkg.name %>.js'],
                 dest: 'dist/<%= pkg.name %>.js'
-            },
+            }
         },
         uglify: {
             options: {
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
         },
         'saucelabs-jasmine': {
             all: {
-                username: 'pimterry',
+                username: 'bezoerb',
                 key: 'KEY',
                 urls: ['http://localhost:8000/_SpecRunner.html'],
                 browsers: [
@@ -98,7 +98,7 @@ module.exports = function (grunt) {
                     jshintrc: 'test/.jshintrc'
                 },
                 src: ['test/*.js']
-            },
+            }
         },
         watch: {
             gruntfile: {
@@ -112,8 +112,8 @@ module.exports = function (grunt) {
             test: {
                 files: '<%= jshint.test.src %>',
                 tasks: ['jshint:test', 'jasmine']
-            },
-        },
+            }
+        }
     });
 
     // These plugins provide necessary tasks.
