@@ -1,0 +1,24 @@
+{
+  "name": "htmlsave",
+  "version": "0.0.1",
+  "description": "HTML save string utilities ",
+  "main": "lib/htmlsave",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bezoerb/htmlsave.git"
+  },
+  "keywords": [
+    "javascript",
+    "split",
+    "truncate",
+    "htmlsave"
+  ],
+  "author": "Ben Zörb",
+  "license": "bezoerb.mit-license.org",
+  "bugs": {
+    "url": "https://github.com/bezoerb/htmlsave/issues"
+  }
+}
