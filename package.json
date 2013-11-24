@@ -1,6 +1,6 @@
 {
   "name": "htmlsave",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "HTML save string utilities ",
   "main": "lib/htmlsave",
   "scripts": {
