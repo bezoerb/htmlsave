@@ -1,4 +1,4 @@
-/*! htmlsave - v0.0.5 - 2013-11-24
+/*! htmlsave - v0.0.6 - 2013-11-24
 * Copyright (c) 2013 Ben Zörb; Licensed MIT */
 /* global define, window, module */
 ;(function (name, factory) {
@@ -97,7 +97,7 @@
 
 
 			// break at whitespace if maxlength reached
-			if (tmpTag === '' && (tmpLength + ws) >= (maxLength -elength) || i === length - 1) {
+			if (tmpTag === '' && (tmpLength >= (maxLength -elength) || string[i] === ' ' && (tmpLength + ws) >= (maxLength -elength)) || i === length - 1) {
 				// starting point for next string
 				if (string[i] === ' ') {
 					tmp = tmp.substr(0,tmp.length-1);

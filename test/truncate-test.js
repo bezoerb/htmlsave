@@ -1,6 +1,34 @@
 "use strict";
 /* global define,describe,it,expect */
 define(['../lib/htmlsave'],function(htmlsave) {
+	describe('truncate html and preserve words',function(){
+		var options = {breakword:false};
+
+		it('should only leave ellipsis', function () {
+			var str = '<p>12 3456789</p>',
+				res = htmlsave.truncate(str,8,options);
+
+			expect(res).toBe('<p>12...</p>');
+		});
+
+		it('should leave <p>hello my...</p>', function () {
+			var str = '<p>hello my little pony</p>',
+				res = htmlsave.truncate(str,15,options);
+
+			expect(res).toBe('<p>hello my...</p>');
+		});
+
+		it('should leave <span>my little...</span>', function () {
+			var str = '<span>my little pony inside my house<span>',
+				res = htmlsave.truncate(str,15,options);
+
+			expect(res).toBe('<span>my little...</span>');
+		});
+
+
+
+
+	});
 
 
 	describe('truncate text',function(){
@@ -63,24 +91,5 @@ define(['../lib/htmlsave'],function(htmlsave) {
 		});
 	});
 
-	describe('truncate html and preserve words',function(){
-		var options = {breakword:false};
-
-		it('should only leave ellipsis', function () {
-			var str = '<p>12 3456789</p>',
-				res = htmlsave.truncate(str,8,options);
-
-			expect(res).toBe('<p>12...</p>');
-		});
-
-		it('should leave 12 + ellipsis', function () {
-			var str = '<p>hello my little pony</p>',
-				res = htmlsave.truncate(str,15,options);
-
-			expect(res).toBe('<p>hello my...</p>');
-		});
-
-
-	});
 
 });
