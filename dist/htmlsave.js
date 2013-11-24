@@ -1,4 +1,4 @@
-/*! htmlsave - v0.0.4 - 2013-11-24
+/*! htmlsave - v0.0.5 - 2013-11-24
 * Copyright (c) 2013 Ben Zörb; Licensed MIT */
 /* global define, window, module */
 ;(function (name, factory) {
@@ -62,7 +62,12 @@
 		for (i = 0; i < length; i++) {
 			// remember last whitespace
 			if (string[i] === ' ' && !tmpTag.length && !options.breakword) {
-				ws = string.substr(i).replace(/<[^>]*>/gm,'').indexOf(' ');
+				var restString = string.substr(i+1).replace(/<[^>]*>/gm,'');
+				ws = restString.indexOf(' ');
+				// not found, use rest string length
+				if (ws < 0) {
+					ws = restString.length;
+				}
 			}
 
 			// tag found
