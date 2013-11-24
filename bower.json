@@ -1,6 +1,6 @@
 {
   "name": "htmlsave",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "dist/htmlsave.min.js",
   "dependencies": {},
   "ignore": [
