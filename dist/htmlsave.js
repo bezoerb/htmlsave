@@ -1,4 +1,4 @@
-/*! htmlsave - v0.0.6 - 2013-11-24
+/*! htmlsave - v0.0.7 - 2013-11-25
 * Copyright (c) 2013 Ben Zörb; Licensed MIT */
 /* global define, window, module */
 ;(function (name, factory) {
@@ -40,6 +40,7 @@
 			elength = 0,
 			tmpTag = '',
 			openTags = [],
+			restString = string.replace(/<[^>]*>/gm,''),
 			i,j;
 
 		// prepare options
@@ -53,16 +54,28 @@
 			}
 		}
 
+		// negative maxlength should count from the end
+		if (maxLength < 0) {
+			maxLength = restString.length + maxLength;
+		}
+
+
 		// compute length of ellipsis
 		if (typeof options.ellipsis === 'string') {
 			elength = options.ellipsis.length;
+			if (elength > maxLength) {
+				options.ellipsis = options.ellipsis.substr(0,maxLength);
+				elength = options.ellipsis.length;
+			}
 		}
 
 		// parse string
 		for (i = 0; i < length; i++) {
 			// remember last whitespace
-			if (string[i] === ' ' && !tmpTag.length && !options.breakword) {
-				var restString = string.substr(i+1).replace(/<[^>]*>/gm,'');
+			if ((i === 0 || string[i] === ' ') && !tmpTag.length && !options.breakword) {
+				if (i > 0) {
+					restString = string.substr(i+1).replace(/<[^>]*>/gm,'');
+				}
 				ws = restString.indexOf(' ');
 				// not found, use rest string length
 				if (ws < 0) {
@@ -147,13 +160,15 @@
 	 * @param {Boolean|String} [options.ellipsis] omission symbol for truncated string, '...' by default
 	 * @return {Array} String parts
 	 */
-	library.split = function(string, maxLength, options) {
+	library.slice = function(string, maxLength, options) {
 		var results = [],
 			length = string.length,
 			tmpLength = 0,
 			tmp = '',
 			tmpTag = '',
 			openTags = [],
+			ws = 0,
+			restString = string.replace(/<[^>]*>/gm,''),
 			i,j;
 
 		if (typeof options !== 'object') {
@@ -167,6 +182,18 @@
 		}
 
 		for (i = 0; i < length; i++) {
+			// remember last whitespace
+			if ((i === 0 || string[i] === ' ') && !tmpTag.length && !options.breakword) {
+				if (i > 0) {
+					restString = string.substr(i+1).replace(/<[^>]*>/gm,'');
+				}
+				ws = restString.indexOf(' ');
+				// not found, use rest string length
+				if (ws < 0) {
+					ws = restString.length;
+				}
+			}
+
 			// tag found
 			if (string[i] === '<' || tmpTag.length) {
 				tmpTag += string[i];
@@ -191,16 +218,12 @@
 			}
 
 
-			var notag = tmpTag === '' && ((i < string.length-2 && string.substr(i+1,2) !== '</') || (i > string.length -1));
+			var notag = tmpTag === '' && ((i < string.length-2 && string.substr(i+1,2) !== '</') || (i > string.length -1)),
+				lengthcheck = (tmpLength + ws) >= maxLength  && (options.breakword || string[i] === ' ');
 
 			// break at whitespace if maxlength reached
-			if (tmpLength >= maxLength && notag && (options.breakword || string[i] === ' ') || i === length - 1) {
+			if (lengthcheck && notag || i === length - 1) {
 				var tmpnew = '';
-				// starting point for next string
-				if (string[i] === ' ') {
-					tmp = tmp.substr(0,tmp.length-1);
-					tmpnew = ' ';
-				}
 
 				// add closing tags if applicable, push to result array and start over
 				for (j = openTags.length - 1; j >= 0 ; j--) {

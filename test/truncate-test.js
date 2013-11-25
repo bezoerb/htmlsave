@@ -1,6 +1,42 @@
 "use strict";
 /* global define,describe,it,expect */
 define(['../lib/htmlsave'],function(htmlsave) {
+	describe('truncate html,preserve words with maxlength lower than ellipsis length',function(){
+		var options = {breakword:false};
+
+		it('should truncate ellipsis', function () {
+			var str = '<p>12 3456789</p>',
+				res = htmlsave.truncate(str,1,options);
+
+			expect(res).toBe('<p>.</p>');
+		});
+
+		it('should leave <p></p>', function () {
+			var str = '<p>hello my little pony</p>',
+				res = htmlsave.truncate(str,0,options);
+
+			expect(res).toBe('<p></p>');
+		});
+	});
+
+	describe('truncate html,preserve words with negative maxlength',function(){
+		var options = {breakword:false};
+
+		it('should truncate ellipsis', function () {
+			var str = '<p>12 3456789</p>',
+				res = htmlsave.truncate(str,-3,options);
+
+			expect(res).toBe('<p>12...</p>');
+		});
+
+		it('should leave <p></p>', function () {
+			var str = '<p>hello my little pony</p>',
+				res = htmlsave.truncate(str,-1,options);
+
+			expect(res).toBe('<p>hello my little...</p>');
+		});
+	});
+
 	describe('truncate html and preserve words',function(){
 		var options = {breakword:false};
 
@@ -26,7 +62,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 		});
 	});
 
-	
+
 
 
 	describe('truncate text',function(){
