@@ -2,6 +2,33 @@
 
 module.exports = function (grunt) {
 
+	// load all grunt tasks
+	require('load-grunt-tasks')(grunt);
+
+	var browsers = [{
+		browserName: "firefox",
+		version: "19",
+		platform: "XP"
+	}, {
+		browserName: "chrome",
+		platform: "XP"
+	}, {
+		browserName: "chrome",
+		platform: "linux"
+	}, {
+		browserName: "internet explorer",
+		platform: "WIN8",
+		version: "10"
+	}, {
+		browserName: "internet explorer",
+		platform: "VISTA",
+		version: "9"
+	}, {
+		browserName: "opera",
+		platform: "Windows 2008",
+		version: "12"
+	}];
+
     // Project configuration.
     grunt.initConfig({
         // Metadata.
@@ -31,15 +58,54 @@ module.exports = function (grunt) {
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
         },
-        jasmine: {
-            src: 'src/**/*.js',
-            options: {
-                specs: 'test/*-test.js',
-                vendor: 'test/vendor/*.js',
-                helpers: 'test/*-helper.js',
-                template: require('grunt-template-jasmine-requirejs')
-            }
-        },
+//        jasmine: {
+//            src: 'src/**/*.js',
+//            options: {
+//                specs: 'test/*-test.js',
+//                vendor: 'test/vendor/*.js',
+//                helpers: 'test/*-helper.js',
+//                template: require('grunt-template-jasmine-requirejs')
+//            }
+//        },
+		jasmine: {
+			requirejs: {
+				src: [],
+				options: {
+					specs: 'test/*-test.js',
+					vendor: 'test/vendor/*.js',
+					helpers: 'test/*-helper.js',
+					template: require('grunt-template-jasmine-requirejs')
+				}
+			},
+			global: {
+				src: 'src/**/*.js',
+				options: {
+					specs: 'test/*-test.js',
+					vendor: 'test/vendor/*.js',
+					helpers: 'test/*-helper.js',
+					template: require('grunt-template-jasmine-requirejs')
+				}
+			}
+		},
+		"jasmine_node": {
+			match: "node-integration.",
+			matchall: true,
+			projectRoot: "./test",
+			useHelpers: false
+		},
+		'saucelabs-jasmine': {
+			all: {
+				options: {
+					urls: ["http://127.0.0.1:8000/_SpecRunner.html"],
+					tunnelTimeout: 5,
+					build: process.env.TRAVIS_JOB_ID,
+					concurrency: 3,
+					browsers: browsers,
+					testname: "htmlsave jasmine tests",
+					tags: ["master"]
+				}
+			}
+		},
         open: {
             jasmine: {
                 path: 'http://127.0.0.1:8000/_SpecRunner.html'
@@ -81,21 +147,15 @@ module.exports = function (grunt) {
         }
     });
 
-    // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-open');
-
     // Default task.
     grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'jasmine']);
+    grunt.registerTask('test', ['jshint', 'jasmine:global','jasmine_node']);
+
+	grunt.registerTask("sauce", ["connect:sauce:keepalive", "saucelabs-jasmine"]);
+	// Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
+	grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);

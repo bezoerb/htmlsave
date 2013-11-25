@@ -1,4 +1,4 @@
-/*! htmlsave - v0.0.8 - 2013-11-25
+/*! htmlsave - v0.0.9 - 2013-11-25
 * Copyright (c) 2013 Ben Zörb; Licensed MIT */
 /* global define, window, module */
 ;(function (name, factory) {
