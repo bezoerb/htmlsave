@@ -24,11 +24,9 @@ define(['../lib/htmlsave'],function(htmlsave) {
 
 			expect(res).toBe('<span>my little...</span>');
 		});
-
-
-
-
 	});
+
+	
 
 
 	describe('truncate text',function(){

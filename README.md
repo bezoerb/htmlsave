@@ -37,7 +37,7 @@ htmlsave.truncate("<p>lorem ipsum html text</p>",12,{
 
 ```javascript
 define(['htmlsave'], function(htmlsave) {
-   htmlsave.split("<span>my extra long html text</span>",10);
+   htmlsave.slice("<span>my extra long html text</span>",10);
 });
 ```
 

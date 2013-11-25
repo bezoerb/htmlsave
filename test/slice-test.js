@@ -3,15 +3,15 @@
 define(['../lib/htmlsave'],function(htmlsave) {
 
 	describe('Existance Test',function(){
-		it('htmlsave.split is function', function () {
-			expect(typeof htmlsave.split).toBe('function');
+		it('htmlsave.slice is function', function () {
+			expect(typeof htmlsave.slice).toBe('function');
 		});
 	});
 
 	describe('Split normal content with breakword',function(){
 		it('should split the string in 3 parts', function () {
 			var str = '123456789',
-				parts = htmlsave.split(str,3);
+				parts = htmlsave.slice(str,3);
 
 			expect(parts.length).toBe(3);
 			expect(parts[0]).toBe('123');
@@ -23,7 +23,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 	describe('Split normal content without breaking words',function(){
 		it('should split the string in 3 parts', function () {
 			var str = '123 4567 89',
-				parts = htmlsave.split(str,3,{
+				parts = htmlsave.slice(str,3,{
 					breakword: false
 				});
 
@@ -37,7 +37,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 	describe('split html text',function(){
 		it('should add missing tags', function () {
 			var str = '<a href="#content">This is a link to my content</a>',
-				parts = htmlsave.split(str,14);
+				parts = htmlsave.slice(str,14);
 
 			expect(parts.length).toBe(2);
 			expect(parts[0]).toBe('<a href="#content">This is a link</a>');
@@ -46,7 +46,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 
 		it('should add more missing tags', function () {
 			var str2 = '<a href="#content">This is a link to my content</a><span>Test</span>',
-				parts2 = htmlsave.split(str2,14);
+				parts2 = htmlsave.slice(str2,14);
 
 			expect(parts2.length).toBe(3);
 			expect(parts2[0]).toBe('<a href="#content">This is a link</a>');
@@ -59,7 +59,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 	describe('html text with many tags',function(){
 		it('should do nothing', function () {
 			var str = '<p><span><ul><li>abc</li><li>def</li></ul></span></p>',
-				parts = htmlsave.split(str,6);
+				parts = htmlsave.slice(str,6);
 
 			expect(parts.length).toBe(1);
 			expect(parts[0]).toBe('<p><span><ul><li>abc</li><li>def</li></ul></span></p>');
@@ -67,7 +67,7 @@ define(['../lib/htmlsave'],function(htmlsave) {
 
 		it('should add missing tags', function () {
 			var str = '<p><span><ul><li>abc</li><li>def</li></ul></span></p>',
-				parts = htmlsave.split(str,3);
+				parts = htmlsave.slice(str,3);
 
 			expect(parts.length).toBe(2);
 			expect(parts[0]).toBe('<p><span><ul><li>abc</li></ul></span></p>');
