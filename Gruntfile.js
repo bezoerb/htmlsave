@@ -3,31 +3,7 @@
 module.exports = function (grunt) {
 
 	// load all grunt tasks
-	require('load-grunt-tasks')(grunt);
-
-	var browsers = [{
-		browserName: "firefox",
-		version: "19",
-		platform: "XP"
-	}, {
-		browserName: "chrome",
-		platform: "XP"
-	}, {
-		browserName: "chrome",
-		platform: "linux"
-	}, {
-		browserName: "internet explorer",
-		platform: "WIN8",
-		version: "10"
-	}, {
-		browserName: "internet explorer",
-		platform: "VISTA",
-		version: "9"
-	}, {
-		browserName: "opera",
-		platform: "Windows 2008",
-		version: "12"
-	}];
+	require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']});
 
     // Project configuration.
     grunt.initConfig({
@@ -94,15 +70,30 @@ module.exports = function (grunt) {
 			useHelpers: false
 		},
 		'saucelabs-jasmine': {
+			// Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
 			all: {
 				options: {
-					urls: ["http://127.0.0.1:8000/_SpecRunner.html"],
-					tunnelTimeout: 5,
-					build: process.env.TRAVIS_JOB_ID,
-					concurrency: 3,
-					browsers: browsers,
-					testname: "htmlsave jasmine tests",
-					tags: ["master"]
+					urls: ['http://localhost:8000/_SpecRunner.html'],
+					browsers: [
+						{"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
+						{"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
+						{"browserName": "firefox", "platform": "Windows 2003", "version": "25"},
+						{"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
+						{"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
+						{"browserName": "googlechrome", "platform": "Windows 7"},
+						{"browserName": "iehta", "platform": "Windows 7", "version": "9"},
+						{"browserName": "iehta", "platform": "Windows 7", "version": "10"},
+						{"browserName": "opera", "platform": "Windows 7", "version": "12"},
+						{"browserName": "android", "platform": "Linux", "version": "4.0"},
+						{"browserName": "iphone", "platform": "OS X 10.8", "version": "6"}
+					],
+					concurrency: 1,
+					detailedError: true,
+					testTimeout:10000,
+					testInterval:1000,
+					testReadyTimeout:2000,
+					testname: 'htmlsave jasmine test',
+					tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
 				}
 			}
 		},
