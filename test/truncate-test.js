@@ -1,7 +1,18 @@
 "use strict";
 /* global define,describe,it,expect */
 define(['../lib/htmlsave'],function(htmlsave) {
-	describe('truncate html,preserve words with maxlength lower than ellipsis length',function(){
+	describe('no truncate needed',function(){
+		var options = {breakword:false};
+
+		it('should not add ellipsis', function () {
+			var str = '<p>12 3456789</p>',
+				res = htmlsave.truncate(str,50,options);
+
+			expect(res).toBe('<p>12 3456789</p>');
+		});
+	});
+
+	describe('truncate html, preserve words with maxlength lower than ellipsis length',function(){
 		var options = {breakword:false};
 
 		it('should truncate ellipsis', function () {
