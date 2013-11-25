@@ -49,3 +49,13 @@ define(['htmlsave'], function(htmlsave) {
 htmlsave.truncate("another too long text",5);
 </script>
 ```
+## Documentation
+
+* `htmlsave.truncate(<string>,<maxlength>,<options>)` method.
+* `htmlsave.slice(<string>,<maxlength>,<options>)` method.
+
+
+## License
+Copyright (c) 2013 Ben Zörb
+Licensed under the [MIT license](http://bezoerb.mit-license.org/).
+
