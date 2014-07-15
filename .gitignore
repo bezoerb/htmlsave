@@ -20,3 +20,4 @@ node_modules
 
 _SpecRunner.html
 .grunt
+test.js

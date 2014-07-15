@@ -22,11 +22,11 @@ define(['../lib/htmlsave'],function(htmlsave) {
 			expect(res).toBe('<p>.</p>');
 		});
 
-		it('should leave <p></p>', function () {
+		it('should return empty string', function () {
 			var str = '<p>hello my little pony</p>',
 				res = htmlsave.truncate(str,0,options);
 
-			expect(res).toBe('<p></p>');
+			expect(res).toBe('');
 		});
 	});
 
