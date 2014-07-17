@@ -15,6 +15,17 @@ module.exports = function (grunt) {
             '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
             ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         // Task configuration.
+
+        browserify: {
+            dist: {
+                src: 'src/htmlsave.js',
+                dest: 'dist/htmlsave.js',
+                options: {
+
+                    transform: ['es6ify','debowerify', 'decomponentify', 'deamdify', 'deglobalify']
+                }
+            }
+        },
         concat: {
             options: {
                 banner: '<%= banner %>',
@@ -30,73 +41,24 @@ module.exports = function (grunt) {
                 banner: '<%= banner %>'
             },
             dist: {
-                src: '<%= concat.dist.dest %>',
+                src: '<%= browserify.dist.dest %>',
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
         },
-//        jasmine: {
-//            src: 'src/**/*.js',
-//            options: {
-//                specs: 'test/*-test.js',
-//                vendor: 'test/vendor/*.js',
-//                helpers: 'test/*-helper.js',
-//                template: require('grunt-template-jasmine-requirejs')
-//            }
-//        },
-		jasmine: {
-			requirejs: {
-				src: [],
-				options: {
-					specs: 'test/*-test.js',
-					vendor: 'test/vendor/*.js',
-					helpers: 'test/*-helper.js',
-					template: require('grunt-template-jasmine-requirejs')
-				}
-			},
-			global: {
-				src: 'src/**/*.js',
-				options: {
-					specs: 'test/*-test.js',
-					vendor: 'test/vendor/*.js',
-					helpers: 'test/*-helper.js',
-					template: require('grunt-template-jasmine-requirejs')
-				}
-			}
-		},
-		"jasmine_node": {
-			match: "node-integration.",
-			matchall: true,
-			projectRoot: "./test",
-			useHelpers: false
-		},
-		'saucelabs-jasmine': {
-			// Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-			all: {
-				options: {
-					urls: ['http://localhost:8000/_SpecRunner.html'],
-					browsers: [
-						{"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
-						{"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
-						{"browserName": "firefox", "platform": "Windows 2003", "version": "25"},
-						{"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
-						{"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
-						{"browserName": "googlechrome", "platform": "Windows 7"},
-						{"browserName": "iehta", "platform": "Windows 7", "version": "9"},
-						{"browserName": "iehta", "platform": "Windows 7", "version": "10"},
-						{"browserName": "opera", "platform": "Windows 7", "version": "12"},
-						{"browserName": "android", "platform": "Linux", "version": "4.0"},
-						{"browserName": "iphone", "platform": "OS X 10.8", "version": "6"}
-					],
-					concurrency: 1,
-					detailedError: true,
-					testTimeout:10000,
-					testInterval:1000,
-					testReadyTimeout:2000,
-					testname: 'htmlsave jasmine test',
-					tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
-				}
-			}
-		},
+// Unit tests.
+        simplemocha: {
+            options: {
+                globals: ['should'],
+                timeout: 3000,
+                ignoreLeaks: false,
+                ui: 'bdd'
+            },
+
+            all: { src: ['test/**/*-test.js'] },
+            truncate: { src: ['test/truncate-test.js'] },
+            slice: { src: ['test/slice-test.js'] },
+            utils: { src: ['test/utils-test.js'] }
+        },
         open: {
             jasmine: {
                 path: 'http://127.0.0.1:8000/_SpecRunner.html'
@@ -139,10 +101,10 @@ module.exports = function (grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
+    grunt.registerTask('default', ['test', 'browserify', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'jasmine:global','jasmine_node']);
+    grunt.registerTask('test', ['jshint', 'simplemocha:all']);
 
 	grunt.registerTask("sauce", ["connect:sauce:keepalive", "saucelabs-jasmine"]);
 	// Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
