@@ -23,7 +23,7 @@ module.exports = function (grunt) {
                 options: {
                     bundleOptions: {
                         standalone: 'htmlsave',
-                        debug: true
+                        debug: false
                     },
                     transform: ['es6ify','debowerify', 'decomponentify', 'deamdify', 'deglobalify']
                 }
