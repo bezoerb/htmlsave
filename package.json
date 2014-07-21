@@ -2,7 +2,7 @@
   "name": "htmlsave",
   "version": "0.0.10",
   "description": "HTML save string utilities ",
-  "main": "lib/htmlsave",
+  "main": "src/htmlsave.js",
   "scripts": {
     "test": "grunt test"
   },

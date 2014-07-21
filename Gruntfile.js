@@ -126,7 +126,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['test', 'browserify', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'simplemocha:all', 'dalek:dist']);
+    grunt.registerTask('test', ['jshint', 'simplemocha:all']);
 
 	grunt.registerTask("sauce", ["connect:sauce:keepalive", "saucelabs-jasmine"]);
 	// Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
