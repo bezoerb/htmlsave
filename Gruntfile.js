@@ -21,7 +21,10 @@ module.exports = function (grunt) {
                 src: 'src/htmlsave.js',
                 dest: 'dist/htmlsave.js',
                 options: {
-
+                    bundleOptions: {
+                        standalone: 'htmlsave',
+                        debug: true
+                    },
                     transform: ['es6ify','debowerify', 'decomponentify', 'deamdify', 'deglobalify']
                 }
             }
@@ -45,7 +48,7 @@ module.exports = function (grunt) {
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
         },
-// Unit tests.
+        // Unit tests.
         simplemocha: {
             options: {
                 globals: ['should'],
