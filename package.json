@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "chai": "^1.9.1",
+    "dalek-driver-sauce": "0.0.1",
     "deamdify": "^0.1.1",
     "debowerify": "^0.8.1",
     "decomponentify": "0.0.3",
@@ -50,6 +51,7 @@
     "grunt-contrib-jshint": "~0.7.2",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-watch": "~0.5.3",
+    "grunt-dalek": "^0.2.0",
     "grunt-jasmine-node": "~0.1.0",
     "grunt-open": "~0.2.2",
     "grunt-saucelabs": "~4.1.2",

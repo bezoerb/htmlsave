@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                 ui: 'bdd'
             },
 
-            all: { src: ['test/**/*-test.js'] },
+            all: { src: ['test/**/*-test.js','!test/browser-integration-test.js'] },
             truncate: { src: ['test/truncate-test.js'] },
             slice: { src: ['test/slice-test.js'] },
             utils: { src: ['test/utils-test.js'] }
@@ -70,7 +70,26 @@ module.exports = function (grunt) {
         connect: {
             test: {
                 port: 8000,
-                keepalive: true
+                hostname: '127.0.0.1'
+            }
+        },
+        dalek: {
+            options: {
+                // invoke phantomjs, chrome & chrome canary
+                browser: ['phantomjs'],
+                // generate an console & an jUnit report
+                reporter: ['console', 'junit'],
+                // don't load config from an Dalekfile
+                dalekfile: false,
+                // specify advanced options (that else would be in your Dalekfile)
+                advanced: {
+                    // is not supported in dalekjs 0.0.8
+                    baseUrl: 'http://<%= connect.test.hostname %>:<%= connect.test.port %>'
+                }
+            },
+            dist: {
+                src: ['test/browser-integration-test.js']
+
             }
         },
         jshint: {
@@ -107,7 +126,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['test', 'browserify', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'simplemocha:all']);
+    grunt.registerTask('test', ['jshint', 'simplemocha:all', 'dalek:dist']);
 
 	grunt.registerTask("sauce", ["connect:sauce:keepalive", "saucelabs-jasmine"]);
 	// Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.

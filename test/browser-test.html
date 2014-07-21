@@ -6,13 +6,13 @@
     <script src="../dist/htmlsave.js"></script>
 </head>
 <body>
-<div id="container"></div>
+<div id="truncate"></div>
 <script>
     var text = htmlsave.truncate('<p>hello world again</p>',16,{
         breakword: false,
         ellipsis: ' …'
     });
-    document.getElementById('container').innerHTML = text;
+    document.getElementById('truncate').innerHTML = text;
 </script>
 </body>
 </html>
