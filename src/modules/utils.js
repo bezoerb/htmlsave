@@ -186,7 +186,7 @@ function strip_tags(input, allowed) {
         .replace(tags, function($0, $1) {
             return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
         });
-};
+}
 
 module.exports.isArray = isArray;
 module.exports.canSplit = canSplit;
