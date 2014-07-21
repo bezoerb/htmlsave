@@ -13,7 +13,8 @@
 var truncate = require('../src/modules/truncate.js'),
     utils = require('../src/modules/utils.js'),
     HTMLHint  = require("htmlhint").HTMLHint,
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    assert = require('chai').assert;
 
 
 
@@ -98,17 +99,38 @@ describe('no truncate needed',function(){
 
         expect(res).to.equals('<p>12 3456789</p>');
     });
+
+    it('should throw an error if ellipsis length equals maxlength', function(){
+        var str = '<p>12 3456789</p>';
+
+        try {
+            var res = truncate(str,3,{
+                ellipsis:'...'
+            });
+            assert.fail('error expected');
+        } catch (err) {
+            assert.ok(err);
+        }
+    });
+
+
+    it('should throw an error if ellipsis length is greater than maxlength', function(){
+        var str = '<p>12 3456789</p>';
+
+        try {
+            var res = truncate(str,1,{
+                ellipsis:'...'
+            });
+            assert.fail('error expected');
+        } catch (err) {
+            assert.ok(err);
+        }
+    });
 });
 
 describe('truncate html, preserve words with maxlength lower than ellipsis length',function(){
     var options = {breakword:false};
 
-    it('should truncate ellipsis', function () {
-        var str = '<p>12 3456789</p>',
-            res = truncate(str,1,options);
-
-        expect(res).to.equals('<p>.</p>');
-    });
 
     it('should return empty string', function () {
         var str = '<p>hello my little pony</p>',
@@ -165,12 +187,6 @@ describe('truncate html and preserve words',function(){
 
 
 describe('truncate text',function(){
-    it('should only leave ellipsis', function () {
-        var str = '123456789',
-            res = truncate(str,3);
-
-        expect(res).to.equals('...');
-    });
 
     it('should leave 12345...', function () {
         var str = '123456789',
@@ -188,12 +204,7 @@ describe('truncate text',function(){
 });
 
 describe('truncate html',function(){
-    it('should only leave ellipsis', function () {
-        var str = '<p>12 3456789</p>',
-            res = truncate(str,3);
 
-        expect(res).to.equals('<p>...</p>');
-    });
 
     it('should leave 12 + ellipsis', function () {
         var str = '<p>12 3456789</p>',

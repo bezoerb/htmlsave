@@ -20,7 +20,7 @@ var defaults = {
  *
  * If str is less than maxWidth characters long, return it.
  * Else abbreviate it to (substring(str, 0, max-ellipsis.length) + ellipsis).
- * If maxWidth is less or equals than ellipsis.length, throw an Error.
+ * If maxLength is less or equals than ellipsis.length, throw an Error.
  * In no case will it return a String of length greater than maxWidth.
  *
  * @method truncate
@@ -65,8 +65,6 @@ module.exports = function(string, maxLength, options) {
     }
 
 
-
-
     // compute length of ellipsis
     if (typeof options.ellipsis === 'string') {
         elength = options.ellipsis.length;
@@ -74,6 +72,12 @@ module.exports = function(string, maxLength, options) {
             options.ellipsis = options.ellipsis.substr(0,maxLength);
             elength = options.ellipsis.length;
         }
+    }
+
+
+    // throw an error if maxlength is less or equala ellipsis length
+    if (elength >= maxLength) {
+        throw 'htmlsave.truncate: Maxlength is less or equal ellipsis length';
     }
 
     // parse string
