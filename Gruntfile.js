@@ -162,10 +162,10 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['test', 'browserify', 'concat','uglify','clean']);
+    grunt.registerTask('default', ['jshint', 'simplemocha:all', 'browserify', 'concat','uglify','clean']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'simplemocha:all']);
+    grunt.registerTask('test', ['jshint', 'simplemocha:all','sauce']);
 
 
     grunt.registerTask("sauce", ["connect:sauce", "saucelabs-mocha"]);
