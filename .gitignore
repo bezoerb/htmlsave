@@ -20,4 +20,8 @@ node_modules
 
 _SpecRunner.html
 .grunt
-test.js
+test.js# Created by http://www.gitignore.io
+
+### Bower ###
+bower_components
+

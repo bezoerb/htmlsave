@@ -1,9 +1,58 @@
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
-	// load all grunt tasks
-	require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']});
+    var browsers = [
+        {
+            browserName: "firefox",
+            version: "30",
+            platform: "Windows 8"
+        },
+        {
+            browserName: "chrome",
+            version: "35",
+            platform: "Windows 8"
+        },
+        {
+            browserName: "internet explorer",
+            platform: "Windows 7",
+            version: "9"
+        },
+        {
+            browserName: "internet explorer",
+            platform: "Windows 7",
+            version: "10"
+        },
+        {
+            browserName: "internet explorer",
+            platform: "Windows 8.1",
+            version: "11"
+        },
+        {
+            browserName: "safari",
+            platform: "OS X 10.9",
+            version: "7"
+        },
+        {
+            browserName: "firefox",
+            platform: "OS X 10.9",
+            version: "30"
+        },
+        {
+            browserName: "chrome",
+            platform: "OS X 10.9",
+            version: "35"
+        },
+        {
+            browserName: "iphone",
+            platform: "OS X 10.9",
+            version: "7.0"
+        }
+    ];
+
+
+    // load all grunt tasks
+    require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']});
 
     // Project configuration.
     grunt.initConfig({
@@ -15,17 +64,19 @@ module.exports = function (grunt) {
             '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
             ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         // Task configuration.
-
+        clean: {
+            tmp: ['.tmp']
+        },
         browserify: {
             dist: {
-                src: 'src/htmlsave.js',
-                dest: 'dist/htmlsave.js',
+                src: 'src/<%= pkg.name %>.js',
+                dest: '.tmp/<%= pkg.name %>.js',
                 options: {
                     bundleOptions: {
-                        standalone: 'htmlsave',
+                        standalone: '<%= pkg.name %>',
                         debug: false
                     },
-                    transform: ['es6ify','debowerify', 'decomponentify', 'deamdify', 'deglobalify']
+                    transform: ['es6ify', 'debowerify', 'decomponentify', 'deamdify', 'deglobalify']
                 }
             }
         },
@@ -35,7 +86,7 @@ module.exports = function (grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['lib/<%= pkg.name %>.js'],
+                src: ['<%= browserify.dist.dest %>'],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
@@ -57,39 +108,27 @@ module.exports = function (grunt) {
                 ui: 'bdd'
             },
 
-            all: { src: ['test/**/*-test.js','!test/browser-integration-test.js'] },
+            all: { src: ['test/**/*-test.js'] },
             truncate: { src: ['test/truncate-test.js'] },
             slice: { src: ['test/slice-test.js'] },
             utils: { src: ['test/utils-test.js'] }
         },
-        open: {
-            jasmine: {
-                path: 'http://127.0.0.1:8000/_SpecRunner.html'
-            }
-        },
         connect: {
-            test: {
-                port: 8000,
-                hostname: '127.0.0.1'
+            sauce: {
+                port: 8000
             }
         },
-        dalek: {
-            options: {
-                // invoke phantomjs, chrome & chrome canary
-                browser: ['phantomjs'],
-                // generate an console & an jUnit report
-                reporter: ['console', 'junit'],
-                // don't load config from an Dalekfile
-                dalekfile: false,
-                // specify advanced options (that else would be in your Dalekfile)
-                advanced: {
-                    // is not supported in dalekjs 0.0.8
-                    baseUrl: 'http://<%= connect.test.hostname %>:<%= connect.test.port %>'
+        'saucelabs-mocha': {
+            all: {
+                options: {
+                    urls: ["http://127.0.0.1:8000/test/browser-integration-test.html"],
+                    tunnelTimeout: 5,
+                    build: process.env.TRAVIS_JOB_ID,
+                    concurrency: 3,
+                    browsers: browsers,
+                    testname: "mocha tests",
+                    tags: ["master"]
                 }
-            },
-            dist: {
-                src: ['test/browser-integration-test.js']
-
             }
         },
         jshint: {
@@ -123,17 +162,13 @@ module.exports = function (grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['test', 'browserify', 'uglify']);
+    grunt.registerTask('default', ['test', 'browserify', 'concat','uglify','clean']);
 
     // Just tests
     grunt.registerTask('test', ['jshint', 'simplemocha:all']);
 
-	grunt.registerTask("sauce", ["connect:sauce:keepalive", "saucelabs-jasmine"]);
-	// Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-	grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
 
-    // Test with a live server and an actual browser
-    grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
+    grunt.registerTask("sauce", ["connect:sauce", "saucelabs-mocha"]);
 
 
 };

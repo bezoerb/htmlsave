@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Basic Test Suite</title>
+    <!-- Load local QUnit. -->
+    <link rel="stylesheet" href="../bower_components/mocha/mocha.css" media="screen">
+    <script src="../bower_components/mocha/mocha.js"></script>
+
+    <script>mocha.setup('bdd');</script>
+
+    <!-- assertion framework -->
+    <script src="../bower_components/chai/chai.js"></script>
+    <script>var expect = chai.expect</script>
+    <script>var assert = chai.assert;</script>
+
+    <!-- library -->
+    <script src="../dist/htmlsave.js"></script>
+    <script>var slice = htmlsave.slice; </script>
+    <script>var truncate = htmlsave.truncate; </script>
+    <script src="slice-sauce-test.js"></script>
+    <script src="truncate-sauce-test.js"></script>
+
+    <script>
+        onload = function(){
+            //mocha.checkLeaks();
+            //mocha.globals(['foo']);
+            var runner = mocha.run();
+
+            var failedTests = [];
+            runner.on('end', function(){
+                window.mochaResults = runner.stats;
+                window.mochaResults.reports = failedTests;
+            });
+
+            runner.on('fail', logFailure);
+
+            function logFailure(test, err){
+
+                var flattenTitles = function(test){
+                    var titles = [];
+                    while (test.parent.title){
+                        titles.push(test.parent.title);
+                        test = test.parent;
+                    }
+                    return titles.reverse();
+                };
+
+                failedTests.push({name: test.title, result: false, message: err.message, stack: err.stack, titles: flattenTitles(test) });
+            };
+        };
+    </script>
+
+</head>
+<body>
+<div id="mocha"></div>
+
+
+</body>
+</html>
