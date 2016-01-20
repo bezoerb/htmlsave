@@ -1,4 +1,5 @@
-# htmlsave [![Build Status](https://travis-ci.org/bezoerb/htmlsave.svg?branch=master)](https://travis-ci.org/bezoerb/htmlsave)
+# htmlsave 
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url]
 
 HTML save string utilities for JavaScript.
 
@@ -59,3 +60,14 @@ htmlsave.truncate("another too long text",5);
 Copyright (c) 2013 Ben Zörb
 Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 
+[npm-url]: https://npmjs.org/package/htmlsave
+[npm-image]: https://badge.fury.io/js/htmlsave.svg
+
+[travis-url]: https://travis-ci.org/bezoerb/htmlsave
+[travis-image]: https://secure.travis-ci.org/bezoerb/htmlsave.svg?branch=master
+
+[depstat-url]: https://david-dm.org/bezoerb/htmlsave
+[depstat-image]: https://david-dm.org/bezoerb/htmlsave.svg
+
+[dlcounter-url]: https://www.npmjs.com/package/htmlsave
+[dlcounter-image]: https://img.shields.io/npm/dm/htmlsave.svg
