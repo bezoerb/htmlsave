@@ -57,7 +57,7 @@ htmlsave.truncate("another too long text",5);
 
 
 ## License
-Copyright (c) 2013 Ben Zörb
+Copyright (c) 2016 Ben Zörb
 Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 
 [npm-url]: https://npmjs.org/package/htmlsave
