@@ -100,7 +100,7 @@ function findNextWhitespacePosition(string,offset) {
     var p2 = tagMatch ? strip_tags(sub.substr(0,sub.indexOf(tagMatch[0]))).length : p1 +1;
     var result = Math.min(p1,p2);
 
-    return result >= 0 ? result : string.length;
+    return result >= 0 ? result : sub.length;
 }
 
 

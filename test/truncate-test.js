@@ -86,4 +86,10 @@ describe('truncate', function() {
         var result = getResultForWord('ipsum', 0, {breakword: true});
         expect(result).to.equals('<p>Lorem ip...</p>');
     });
+
+    it.only('should not strip less long text', function() {
+        var str = 'this text has 370 characters and we are truncating to 420 sensory claymore mine free-market camera Chiba jeans engine denim tube alcohol. weathered knife papier-mache artisanal corporation boy augmented reality footage otaku table modem digital city dome film boat camera car uplink beef noodles render-farm nodal point wonton soup man hotdog RAF skyscraper market human';
+        var result = truncate(str,420);
+        expect(result).to.equals(str);
+    });
 });
