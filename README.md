@@ -49,7 +49,7 @@ define(['htmlsave'], function(htmlsave) {
 <script>
 htmlsave.truncate("another too long text",5);
 </script>
-```
+```                                
 
 ## API
 
