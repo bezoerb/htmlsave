@@ -1,0 +1,12 @@
+{
+  "name": "htmlsave",
+  "version": "0.0.9",
+  "main": "dist/htmlsave.min.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
