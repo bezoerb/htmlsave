@@ -15,7 +15,7 @@ const blockLevelElements = ['address', 'article', 'aside', 'audio', 'blockquote'
 const voidElements = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link',
     'meta', 'param', 'source', 'track', 'wbr'];
 
-const breakElements = blockLevelElements.concat(['br', 'input', 'img', 'embed', 'hr', 'keygen']);
+const breakElements = blockLevelElements.concat(voidElements);
 
 function canBreak(val) {
     return breakElements.indexOf(val) !== -1;
