@@ -62,7 +62,7 @@
     "ignores": [
       "dist/measure-text.js",
       "dist/measure-text.min.js",
-      "test.old/**/*.js",
+      "test/browser/**/*.js",
       "Gruntfile.js",
       "test.js"
     ]

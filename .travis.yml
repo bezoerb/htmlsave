@@ -7,3 +7,8 @@ node_js:
   - '0.12'
 
 after_success: npm run coveralls
+
+env:
+  global:
+  - secure: FLNwmi/RmrA9T6VaK1dGPF34EjRdULr0dkVT9prrhz50my9o9zLlvgEilytYPI1SRRVvQBPVQcCxuAUgN5WN479V4hUryTq4qqSkqsPHa1FH1G/yZqyvwsm/e2Nb6sZ1AS5pOP07KXO3UNnKWa5d7R92cUuaTaYWgOQH24MvgjA=
+  - secure: R9qe+NtYNBT1I5ImzdP3mbUsYz17mWAeqiA9dKKrngCB2azHG/wF85HIvTt7E3bP8jr27iUgOlxAb4FMyN4+VZwAIlmo2zoR5pvSnd7bXWScWdIvRsBF2WWXgNph+NONf6GNqR0L4YxA5MItYcE7TteMzHZ5jg9JjPrD5LEgShk=

@@ -54,63 +54,6 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // Metadata.
-        pkg: grunt.file.readJSON('package.json'),
-        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
-        // Task configuration.
-        clean: {
-            tmp: ['.tmp']
-        },
-        browserify: {
-            dist: {
-                src: 'src/<%= pkg.name %>.js',
-                dest: '.tmp/<%= pkg.name %>.js',
-                options: {
-                    bundleOptions: {
-                        standalone: '<%= pkg.name %>',
-                        debug: false
-                    },
-                    transform: ['es6ify', 'debowerify', 'decomponentify', 'deamdify', 'deglobalify']
-                }
-            }
-        },
-        concat: {
-            options: {
-                banner: '<%= banner %>',
-                stripBanners: true
-            },
-            dist: {
-                src: ['<%= browserify.dist.dest %>'],
-                dest: 'dist/<%= pkg.name %>.js'
-            }
-        },
-        uglify: {
-            options: {
-                banner: '<%= banner %>'
-            },
-            dist: {
-                src: '<%= browserify.dist.dest %>',
-                dest: 'dist/<%= pkg.name %>.min.js'
-            }
-        },
-        // Unit tests.
-        simplemocha: {
-            options: {
-                globals: ['should'],
-                timeout: 3000,
-                ignoreLeaks: false,
-                ui: 'bdd'
-            },
-
-            all: {src: ['test/**/*-test.js']},
-            truncate: {src: ['test/truncate-test.js']},
-            slice: {src: ['test/slice-test.js']},
-            utils: {src: ['test/utils-test.js']}
-        },
         connect: {
             sauce: {
                 port: 8000
@@ -128,43 +71,9 @@ module.exports = function (grunt) {
                     tags: ["master"]
                 }
             }
-        },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc'
-            },
-            gruntfile: {
-                src: 'Gruntfile.js'
-            },
-            lib: {
-                src: ['src/**/*.js']
-            },
-            test: {
-                src: ['test/*.js']
-            }
-        },
-        watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            lib: {
-                files: '<%= jshint.lib.src %>',
-                tasks: ['jshint:lib', 'jasmine']
-            },
-            test: {
-                files: '<%= jshint.test.src %>',
-                tasks: ['jshint:test', 'jasmine']
-            }
         }
     });
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'simplemocha:all', 'browserify', 'concat', 'uglify', 'clean']);
-
-    // Just tests
-    grunt.registerTask('test', ['jshint', 'simplemocha:all', 'sauce']);
-
-    grunt.registerTask("sauce", ["connect:sauce", "saucelabs-mocha"]);
-
+    grunt.registerTask('default', ['connect:sauce', 'saucelabs-mocha']);
 };

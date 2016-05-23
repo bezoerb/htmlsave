@@ -463,7 +463,7 @@
 
     var voidElements = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
 
-    var breakElements = blockLevelElements.concat(['br', 'input', 'img', 'embed', 'hr', 'keygen']);
+    var breakElements = blockLevelElements.concat(voidElements);
 
     function canBreak(val) {
         return breakElements.indexOf(val) !== -1;
