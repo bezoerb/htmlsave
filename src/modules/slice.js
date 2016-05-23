@@ -1,11 +1,16 @@
-var utils = require('./utils.js');
-
-var defaults = {
-    breakword: true,
-    ellipsis: '...'
+import * as utils from './utils.js';
+const defaults = {
+    breakword: true
 };
 
+function getMax(val) {
+    if (utils.isArray(val)) {
+        let last = val[val.length - 1];
+        return (drop) => drop && val.shift() || val[0] || last;
+    }
 
+    return () => val;
+}
 
 /**
  * Split HTML string and keep tag safe.
@@ -13,45 +18,33 @@ var defaults = {
  * @method truncate
  * @param {String} string string needs to be truncated
  * @param {Number|Array} maxLength length of truncated string when array is provided use as breakpoints
- * @param {Object} options (optional)
- * @param {Boolean} [options.breakword] flag to specify if words should be splitted, false by default
- * @param {Boolean|String} [options.ellipsis] omission symbol for truncated string, '...' by default
+ * @param {Object} params (optional)
+ * @param {Boolean} [params.breakword] flag to specify if words should be splitted, false by default
+ * @param {Boolean|String} [params.ellipsis] omission symbol for truncated string, '...' by default
  * @return {Array} String parts
  */
-module.exports = function(string, maxLength, options) {
-    var results = [],
-        length = string.length,
-        tmpLength = 0,
-        tmp = '',
-        tmpTag = '',
-        max,
-        openTags = [],
-        ws = 0,
-        restString = string.replace(/<[^>]*>/gm,''),
-        i,j;
+export function slice(string, maxLength, params) {
+    var results = [];
+    var length = string.length;
+    var tmpLength = 0;
+    var tmp = '';
+    var tmpTag = '';
+    var openTags = [];
+    let openTagsReverse = [];
+    var ws = 0;
+    var restString = string.replace(/<[^>]*>/gm, '');
 
-    if (typeof options !== 'object') {
-        options = defaults;
-    } else {
-        for (var key in defaults) {
-            if (typeof options[key] === 'undefined') {
-                options[key] = defaults[key];
-            }
-        }
-    }
+    const max = getMax(maxLength);
 
-    if (utils.isArray(maxLength)) {
-        max = Array.prototype.shift.call(maxLength);
-    } else {
-        max = maxLength;
-    }
+    let options = utils.assign({}, defaults, params || {});
 
-    for (i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         // remember last whitespace
         if ((i === 0 || string[i] === ' ') && !tmpTag.length && !options.breakword) {
             if (i > 0) {
-                restString = string.substr(i+1).replace(/<[^>]*>/gm,'');
+                restString = string.substr(i + 1).replace(/<[^>]*>/gm, '');
             }
+
             ws = restString.indexOf(' ');
             // not found, use rest string length
             if (ws < 0) {
@@ -67,15 +60,17 @@ module.exports = function(string, maxLength, options) {
                 tmp += tmpTag;
                 tmpTag = '';
                 openTags.pop();
+                openTagsReverse.shift();
                 // void element tag found - just append to string
                 // http://www.w3.org/TR/html-markup/syntax.html#void-element
-            } else if (string[i] === '>' && utils.isVoidElement(tmpTag) ) {
+            } else if (string[i] === '>' && utils.isVoidElement(tmpTag)) {
                 tmp += tmpTag;
                 tmpTag = '';
                 // opening tag found
             } else if (string[i] === '>') {
                 tmp += tmpTag;
                 openTags.push(tmpTag);
+                openTagsReverse.unshift(tmpTag.match(/<\s*(\w+)\s*/)[1]);
                 tmpTag = '';
             }
         } else {
@@ -83,28 +78,44 @@ module.exports = function(string, maxLength, options) {
             tmp += string[i];
         }
 
+        // // check if we're inside a tag
+        let notag = !tmpTag;
 
-        var notag = tmpTag === '' && ((i < string.length-2 && string.substr(i+1,2) !== '</') || (i > string.length -1)),
-            lengthcheck = (tmpLength + ws) >= max  && (options.breakword || utils.canSplit(string,i,!!options.ellipsis));
+        let cycleComplete = options.breakword && (tmpLength >= max()) && notag;
+
+        if (!options.breakword && notag) {
+            let possibleEnd = utils.whitespacePos(string, i) === 0;
+
+            // create trimmed string to get the characters to the "next" whitespace
+            let count = utils.nextWhitespacePos(string, i);
+
+            let next = (tmpLength + count);
+
+            cycleComplete = possibleEnd && next > max();
+        }
+
+        // prevent empty closing tags at the end
+        if (cycleComplete && openTagsReverse[0]) {
+            let closingRegexp = new RegExp('^<\/(' + openTagsReverse[0] + ')\\s*>');
+            let tmpMatch = string.substr(i + 1).match(closingRegexp);
+            cycleComplete &= !tmpMatch;
+        }
 
         // break at whitespace if maxlength reached
-        if (lengthcheck && notag || i === length - 1) {
-            var tmpnew = '';
+        if (cycleComplete || (i === string.length - 1 && tmpLength)) {
+            let tmpnew = '';
 
-            if (utils.isArray(maxLength) && maxLength.length) {
-                max = Array.prototype.shift.call(maxLength);
-            } else if (utils.isArray(maxLength)) {
-                max = length;
-            }
+            // decrease max
+            max(true);
 
             // add closing tags if applicable, push to result array and start over
-            for (j = openTags.length - 1; j >= 0 ; j--) {
-                var tag = openTags[j],
-                    type = tag.match(/<\s*(\w+)\s*/)[1],
-                    close = '</' + type + '>';
+            for (let j = openTags.length - 1; j >= 0; j--) {
+                let tag = openTags[j];
+                let type = tag.match(/<\s*(\w+)\s*/)[1];
 
                 // append closing tag to part x
-                tmp += close;
+                tmp += '</' + type + '>';
+
                 // prepend opening tag to part x+1
                 tmpnew = tag + tmpnew;
             }
@@ -113,8 +124,7 @@ module.exports = function(string, maxLength, options) {
             tmp = tmpnew;
             tmpLength = 0;
         }
-
     }
 
     return results;
-};
+}

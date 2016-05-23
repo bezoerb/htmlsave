@@ -2,10 +2,16 @@
   "name": "htmlsave",
   "version": "0.0.12",
   "description": "HTML save string utilities ",
-  "main": "src/htmlsave.js",
+  "main": "dist/htmlsave.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "xo && nyc ava",
+    "compile": "browserify src/htmlsave.js -s htmlsave -t rollupify -t babelify --outfile dist/htmlsave.js && uglifyjs dist/htmlsave.js -o dist/htmlsave.min.js",
+    "prepublish": "npm run compile"
   },
+  "files": [
+    "dist/htmlsave.js",
+    "dist/htmlsave.min.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:bezoerb/htmlsave.git"
@@ -32,30 +38,45 @@
   },
   "jam": {
     "dependencies": {},
-    "main": "lib/htmlsave.js"
+    "main": "dist/htmlsave.js"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
-    "dalek-driver-sauce": "0.0.1",
-    "deamdify": "^0.1.1",
-    "debowerify": "^0.8.1",
-    "decomponentify": "0.0.3",
-    "deglobalify": "^0.2.0",
-    "es6ify": "^1.2.0",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^2.1.3",
-    "grunt-cli": "~0.1.11",
-    "grunt-contrib-clean": "^0.5.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-open": "~0.2.2",
-    "grunt-saucelabs": "^8.1.1",
-    "grunt-simple-mocha": "^0.4.0",
+    "ava": "^0.14.0",
+    "babel-core": "^6.7.4",
+    "babel-plugin-transform-es2015-modules-umd": "^6.6.5",
+    "babel-polyfill": "^6.9.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "coveralls": "^2.11.9",
     "htmlhint": "^0.9.6",
-    "load-grunt-tasks": "~0.2.0",
-    "mocha": "^1.20.1"
+    "nyc": "^6.1.1",
+    "object-assign": "^4.1.0",
+    "rollupify": "^0.3.1",
+    "uglify-js": "^2.6.2",
+    "xo": "^0.13.0"
+  },
+  "xo": {
+    "space": 4,
+    "ignores": [
+      "dist/measure-text.js",
+      "dist/measure-text.min.js",
+      "test.old/**/*.js",
+      "Gruntfile.js",
+      "test.js"
+    ]
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-es2015-modules-umd"
+    ]
   }
 }

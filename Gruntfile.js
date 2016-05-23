@@ -1,7 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
     var browsers = [
         {
             browserName: "firefox",
@@ -50,7 +49,6 @@ module.exports = function(grunt) {
         }
     ];
 
-
     // load all grunt tasks
     require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']});
 
@@ -59,10 +57,10 @@ module.exports = function(grunt) {
         // Metadata.
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-            '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-            '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-            '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-            ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+        '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         // Task configuration.
         clean: {
             tmp: ['.tmp']
@@ -108,10 +106,10 @@ module.exports = function(grunt) {
                 ui: 'bdd'
             },
 
-            all: { src: ['test/**/*-test.js'] },
-            truncate: { src: ['test/truncate-test.js'] },
-            slice: { src: ['test/slice-test.js'] },
-            utils: { src: ['test/utils-test.js'] }
+            all: {src: ['test/**/*-test.js']},
+            truncate: {src: ['test/truncate-test.js']},
+            slice: {src: ['test/slice-test.js']},
+            utils: {src: ['test/utils-test.js']}
         },
         connect: {
             sauce: {
@@ -162,13 +160,11 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'simplemocha:all', 'browserify', 'concat','uglify','clean']);
+    grunt.registerTask('default', ['jshint', 'simplemocha:all', 'browserify', 'concat', 'uglify', 'clean']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'simplemocha:all','sauce']);
-
+    grunt.registerTask('test', ['jshint', 'simplemocha:all', 'sauce']);
 
     grunt.registerTask("sauce", ["connect:sauce", "saucelabs-mocha"]);
-
 
 };

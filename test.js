@@ -8,8 +8,8 @@
  * All rights reserved.
  */
 var htmlsave = require('./src/htmlsave.js'),
-    res,options = {breakword:false};
+    res, options = {breakword:false};
 
 
-res = htmlsave.truncate('123456 789',8);
+res = htmlsave.truncate('123456 789', 8);
 console.log(res);

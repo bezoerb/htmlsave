@@ -7,6 +7,5 @@
  * http://bezoerb.mit-license.org/
  * All rights reserved.
  */
-
-module.exports.slice = require('./modules/slice.js');
-module.exports.truncate = require('./modules/truncate.js');
+export {slice} from './modules/slice';
+export {truncate} from './modules/truncate';

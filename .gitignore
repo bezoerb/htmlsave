@@ -25,3 +25,5 @@ test.js# Created by http://www.gitignore.io
 ### Bower ###
 bower_components
 
+.nyc_output
+

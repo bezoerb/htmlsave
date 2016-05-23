@@ -1,19 +1,19 @@
 "use strict";
 /* global describe, it */
-var slice = slice || require('../src/modules/slice.js'),
+var slice = slice || require('../dist/htmlsave').slice,
     expect = expect || require('chai').expect;
 
 
-describe('Existance Test', function() {
-    it('slice is function', function() {
+describe('Existance Test', function () {
+    it('slice is function', function () {
         expect(typeof slice).to.equals('function');
     });
 });
 
-describe('slice text', function() {
+describe('slice text', function () {
     var options = {breakword: false};
 
-    it('should split text to seperate words', function() {
+    it('should split text to seperate words', function () {
         var str = '<a href="#content">This is a link to my content</a>',
             parts = slice(str, 0, options);
 
@@ -28,7 +28,7 @@ describe('slice text', function() {
     });
 
 
-    it('should split text in three parts', function() {
+    it('should split text in three parts', function () {
         var str = '<a href="#content">This is a link to my content</a>',
             parts = slice(str, 13, options);
 
@@ -41,8 +41,8 @@ describe('slice text', function() {
 });
 
 
-describe('slice normal content with breakword', function() {
-    it('should slice the string in 3 parts', function() {
+describe('slice normal content with breakword', function () {
+    it('should slice the string in 3 parts', function () {
         var str = '123456789',
             parts = slice(str, 3);
 
@@ -53,8 +53,8 @@ describe('slice normal content with breakword', function() {
     });
 });
 
-describe('slice normal content without breaking words', function() {
-    it('should slice the string in 3 parts', function() {
+describe('slice normal content without breaking words', function () {
+    it('should slice the string in 3 parts', function () {
         var str = '123 4567 89',
             parts = slice(str, 3, {
                 breakword: false
@@ -67,8 +67,8 @@ describe('slice normal content without breaking words', function() {
     });
 });
 
-describe('slice html text', function() {
-    it('should add missing tags', function() {
+describe('slice html text', function () {
+    it('should add missing tags', function () {
         var str = '<a href="#content">This is a link to my content</a>',
             parts = slice(str, 14);
 
@@ -77,7 +77,7 @@ describe('slice html text', function() {
         expect(parts[1]).to.equals('<a href="#content"> to my content</a>');
     });
 
-    it('should add more missing tags', function() {
+    it('should add more missing tags', function () {
         var str2 = '<a href="#content">This is a link to my content</a><span>Test</span>',
             parts2 = slice(str2, 14);
 
@@ -89,8 +89,8 @@ describe('slice html text', function() {
 });
 
 
-describe('html text with many tags', function() {
-    it('should do nothing', function() {
+describe('html text with many tags', function () {
+    it('should do nothing', function () {
         var str = '<p><span><ul><li>abc</li><li>def</li></ul></span></p>',
             parts = slice(str, 6);
 
@@ -98,7 +98,7 @@ describe('html text with many tags', function() {
         expect(parts[0]).to.equals('<p><span><ul><li>abc</li><li>def</li></ul></span></p>');
     });
 
-    it('should add missing tags', function() {
+    it('should add missing tags', function () {
         var str = '<p><span><ul><li>abc</li><li>def</li></ul></span></p>',
             parts = slice(str, 3);
 

@@ -1,7 +1,7 @@
-var utils = require('./utils.js');
+import * as utils from './utils.js';
 
-var defaults = {
-    breakword: false,
+const defaults = {
+    breakword: true,
     ellipsis: '...'
 };
 
@@ -27,31 +27,28 @@ var defaults = {
  * @alias abbreviate
  * @param {String} string string needs to be truncated
  * @param {Number} maxLength length of truncated string
- * @param {Object} options (optional)
- * @param {Boolean} [options.breakword] flag to specify if words should be splitted, false by default
- * @param {Boolean|String} [options.ellipsis] omission symbol for truncated string, '...' by default
+ * @param {Object} params (optional)
+ * @param {Boolean} [params.breakword] flag to specify if words should be splitted, false by default
+ * @param {Boolean|String} [params.ellipsis] omission symbol for truncated string, '...' by default
  * @return {Array} String parts
  */
-module.exports = function(string, maxLength, options) {
-    var length = string.length,
-        //ws = 0,
-        tmpLength = 0,
-        tmp = '',
-        elength = 0,
-        tmpTag = '',
-        openTags = [],
-        restString = string.replace(/<[^>]*>/gm,''),
-        i,j;
+export function truncate(string, maxLength, params) {
+    var length = string.length;
+    var tmpLength = 0;
+    var tmp = '';
+    var elength = 0;
+    var tmpTag = '';
+    var openTags = [];
+    var restString = string.replace(/<[^>]*>/gm, '');
+    var strippedLength = utils.stripTags(string).length;
+    var i;
+    var j;
 
-    // prepare options
-    if (typeof options !== 'object') {
-        options = defaults;
-    } else {
-        for (var key in defaults) {
-            if (typeof options[key] === 'undefined') {
-                options[key] = defaults[key];
-            }
-        }
+    let options = utils.assign({}, defaults, params || {});
+
+    // nothing to do
+    if (strippedLength <= maxLength) {
+        return string;
     }
 
     // special case: maxlength: 0
@@ -64,20 +61,18 @@ module.exports = function(string, maxLength, options) {
         maxLength = restString.length + maxLength;
     }
 
-
     // compute length of ellipsis
     if (typeof options.ellipsis === 'string') {
         elength = options.ellipsis.length;
         if (elength > maxLength) {
-            options.ellipsis = options.ellipsis.substr(0,maxLength);
+            options.ellipsis = options.ellipsis.substr(0, maxLength);
             elength = options.ellipsis.length;
         }
     }
 
-
     // throw an error if maxlength is less or equala ellipsis length
     if (elength >= maxLength) {
-        throw 'htmlsave.truncate: Maxlength is less or equal ellipsis length';
+        throw new Error('htmlsave.truncate: Maxlength is less or equal ellipsis length');
     }
 
     // parse string
@@ -105,35 +100,37 @@ module.exports = function(string, maxLength, options) {
             tmp += string[i];
         }
 
+        let done = options.breakword && (tmpLength === maxLength - elength);
 
-        var notag = tmpTag === '' && ((i < string.length-2 && string.substr(i+1,2) !== '</') || (i > string.length -1));
-        var ws = options.breakword ? 0 : notag && utils.findNextWhitespacePosition(string,i+1);
-        var lengthcheck = (tmpLength + ws + elength) > maxLength  && (options.breakword || utils.canSplit(string,i));
+        if (!options.breakword) {
+            let possibleEnd = utils.whitespacePos(string, i) === 0;
 
+            // create trimmed string to get the characters to the "next" whitespace
+            let count = utils.nextWhitespacePos(string, i);
 
-        // break at whitespace if maxlength reached
-        if (lengthcheck && notag || i === length - 1) {
-
-            // starting point for next string
-            if (string[i] === ' ') {
-                tmp = tmp.substr(0,tmp.length-1);
-                tmpLength--;
+            // check if we need ellipsis
+            let next = (tmpLength + count) - 1;
+            if (next < strippedLength) {
+                next += elength;
             }
 
-            if (tmpLength > (maxLength -elength)) {
-                var diff = tmp.length + (maxLength - (tmpLength + elength));
+            // edge case
+            // first word is already lomger than max length
+            if (tmpLength === 1 && next > maxLength) {
+                possibleEnd = true;
+                tmpLength--;
+                tmp = tmp.substr(0, tmp.length - 1);
+            }
 
+            done = possibleEnd && next > maxLength;
+        }
 
-
-                // check for conflicting tags
-                if (/^<?[^<]*>/.test(tmp.substr(diff))) {
-                    // conflicted tag found -> remove from string
-                    tmp = tmp.substr(0,diff).substr(0,tmp.lastIndexOf('<'));
-                    // and remove from stack
-                    openTags.pop();
-                } else {
-                    tmp = tmp.substr(0,diff);
-                }
+        // break at whitespace if maxlength reached
+        if (done || i === length - 1) {
+            // starting point for next string
+            if (string[i] === ' ') {
+                tmp = tmp.substr(0, tmp.length - 1);
+                tmpLength--;
             }
 
             if (openTags.length === 0 && options.ellipsis && tmp.length < string.length) {
@@ -141,10 +138,10 @@ module.exports = function(string, maxLength, options) {
             }
 
             // add closing tags if applicable, push to result array and start over
-            for (j = openTags.length - 1; j >= 0 ; j--) {
-                var tag = openTags[j],
-                    type = tag.match(/<\s*(\w+)\s*/)[1],
-                    close = '</' + type + '>';
+            for (j = openTags.length - 1; j >= 0; j--) {
+                var tag = openTags[j];
+                var type = tag.match(/<\s*(\w+)\s*/)[1];
+                var close = '</' + type + '>';
 
                 // append closing tag to part x
                 if (j === openTags.length - 1 && options.ellipsis) {
@@ -153,12 +150,9 @@ module.exports = function(string, maxLength, options) {
                 tmp += close;
             }
 
-
-
             break;
         }
-
     }
 
     return tmp;
-};
+}

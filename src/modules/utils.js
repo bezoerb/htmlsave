@@ -1,27 +1,61 @@
 /**
  *
  * @author Ben Zörb @bezoerb https://github.com/bezoerb
- * @copyright Copyright (c) 2014 Ben Zörb
+ * @copyright Copyright (c) 2016 Ben Zörb
  *
  * Licensed under the MIT license.
  * http://bezoerb.mit-license.org/
  * All rights reserved.
  */
 
-"use Strict";
+const blockLevelElements = ['address', 'article', 'aside', 'audio', 'blockquote', 'canvas', 'dd', 'div', 'dl', 'fieldset',
+    'figcaption', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'noscript', 'ol', 'output',
+    'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video'];
 
-var blockLevelElements = ['address','article','aside','audio','blockquote','canvas','dd','div','dl','fieldset',
-    'figcaption','footer','form','h1','h2','h3','h4','h5','h6','header','hgroup','hr','noscript','ol','output',
-    'p','pre','section','table','tfoot','ul','video'];
+const voidElements = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link',
+    'meta', 'param', 'source', 'track', 'wbr'];
+
+const breakElements = blockLevelElements.concat(['br', 'input', 'img', 'embed', 'hr', 'keygen']);
+
+function canBreak(val) {
+    return breakElements.indexOf(val) !== -1;
+}
+
+function isVoid(val) {
+    return voidElements.indexOf(val) !== -1;
+}
 
 /**
  * Check if value is an array
  * @param value
  * @returns {*}
  */
-function isArray(value) {
+export function isArray(value) {
     return (value && typeof value === 'object' && typeof value.length === 'number' &&
         Object.prototype.toString.call(value) === '[object Array]') || false;
+}
+
+/**
+ * Stripped es2015 assign
+ * @param target
+ * @param source
+ * @returns {*}
+ */
+export function assign(target, ...source) {
+    var from;
+    var to = Object(target);
+
+    for (var s = 0; s < source.length; s++) {
+        from = Object(source[s]);
+
+        for (var key in from) {
+            if (Object.prototype.hasOwnProperty.call(from, key)) {
+                to[key] = from[key];
+            }
+        }
+    }
+
+    return to;
 }
 
 /**
@@ -30,79 +64,103 @@ function isArray(value) {
  *
  * @param {string} string
  * @param {int} i
- * @param {boolean} allowEmptyTags
  * @returns {boolean}
  */
-function canSplit(string,i,allowEmptyTags) {
-    // i is not within the range of i
+export function canSplit(string, i) {
+    // i is not within the range of allowed splitting positions
     if (i <= 0 || i >= string.length) {
         return false;
     }
 
-    // save splitting can be done on whitespace ;)
-    if (string[i] === ' ') {
-        return true;
-    }
-
     // or after closing respectively before opening an block level element
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
-    var tagBefore,tagAfter;
+    let strBefore = string.substr(0, i);
+    let strAfter = string.substr(i);
 
-
-    if (allowEmptyTags) {
-        // fetch closing tag right before i
-        tagBefore = (string.substr(0,i).match(/<\/([\w]+)\/?>?$/m) || ['-','-'])[1];
-        // fetch opening tag right behind i
-        tagAfter = (string.substr(i+1).match(/^<?([\w]+)\/?>/m) || ['-','-'])[1];
-    } else {
-        // fetch tag right before i
-        tagBefore = (string.substr(0,i).match(/<\/?([\w]+)\/?>?$/m) || ['-','-'])[1];
-        // fetch tag right behind i
-        tagAfter = (string.substr(i+1).match(/^<?\/?([\w]+)\/?>/m) || ['-','-'])[1];
-    }
-
-    if (blockLevelElements.indexOf(tagBefore) !== -1 || blockLevelElements.indexOf(tagAfter) !== -1) {
+    // save splitting can be done before and after whitespace ;)
+    if (string[i] === ' ' || string[i - 1] === ' ') {
         return true;
     }
 
-    // any other case should return false
-    return false;
+    // first check last character before using more expensive regex
+    let tagBefore = string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^\>]*\/>$/m));
+    let tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^\>]*>/m) || strAfter.match(/^<(\w+)[^\>]*\/>/m));
+
+    return tagBefore && canBreak(tagBefore[1]) || tagAfter && canBreak(tagAfter[1]);
 }
 
 /**
  * Compute the next 'visible' position for a possible cut
  *
- * @param string
+ * @param {string} string
+ * @param {int} offset
  *
  * @return int
  */
-function findNextWhitespacePosition(string,offset) {
-    var sub = string.substr(offset),
-        insideTag = /^[^<]*>/.test(sub),
-        reg = new RegExp('<\/?((?:' + blockLevelElements.join(')|(?:') + '))'),
-        tagMatch = sub.match(reg);
+export function whitespacePos(string, offset = 0) {
+    let str = string.substr(offset);
 
+    // if we are inside a tag, rewind the string to the beginning of the tag
+    if (/^[^<]*>/.test(str)) {
+        let start = string.substr(0, offset).lastIndexOf('<');
 
-    // compute next whitespace position
-    if (insideTag) {
-        // if we are inside a closing blocklevel element, next possible cut is right after this element
-        // because the tags are not visible, we return 0
-        var match = string.substr(string.substr(0,offset).lastIndexOf('<')).match(/^<\/(\w+)/);
-        if (match && blockLevelElements.indexOf(match[1]) !== -1) {
-            return 0;
+        if (start >= 0) {
+            // rewind is posible
+            str = string.substr(start);
         } else {
-            // start counting from the end of the tag
-            sub = sub.substr(sub.indexOf('>')+1);
+            // missing tag start token, strip remaining tag
+            str = str.replace(/^[^<]*>/, '');
         }
     }
 
-    var p1 = strip_tags(sub).indexOf(' ');
-    var p2 = tagMatch ? strip_tags(sub.substr(0,sub.indexOf(tagMatch[0]))).length : p1 +1;
-    var result = Math.min(p1,p2);
+    // search for first whitespace
+    let stripped = stripTags(str);
+    let trimmed = stripped.replace(/^[^\s]*/, '');
+    let pos = [stripped.length - trimmed.length];
 
-    return result >= 0 ? result : sub.length;
+    let regEnd = new RegExp('<\/((?:' + breakElements.join(')|(?:') + '))[^>]*>');
+    let tagMatchEnd = str.match(regEnd);
+    if (tagMatchEnd) {
+        let tmp = str.substr(0, str.indexOf(tagMatchEnd[0]));
+        pos.push(stripTags(tmp).length);
+    }
+
+    let regClose = new RegExp('<((?:' + breakElements.join(')|(?:') + '))[^>]*\/>');
+    let tagMatchClose = str.match(regClose);
+    if (tagMatchClose) {
+        let tmp = str.substr(0, str.indexOf(tagMatchClose[0]));
+        pos.push(stripTags(tmp).length);
+    }
+
+    return Math.min.apply(null, pos);
 }
 
+/**
+ * next 'visible' position for a possible cut. Use next one if we are on a whitespace
+ * @param string
+ * @param offset
+ * @returns {Number}
+ */
+export function nextWhitespacePos(string, offset = 0) {
+    let wspos = whitespacePos(string, offset);
+
+    // use result if we're not sitting right on a whitespace
+    if (wspos) {
+        return wspos;
+    }
+
+    let str = string.substr(offset);
+    // 1st check whitespace
+    if (/^\s/.test(str)) {
+        let ws = whitespacePos(string, offset + 1);
+        return ws || 1;
+    }
+
+    // 2nd remove tag in front  (looks like we're right inside a tag
+    let tail = str.replace(/^<?[^>]*>/, '');
+
+    return whitespacePos(tail, 0);
+}
 
 /**
  * Check if element is a void element
@@ -111,29 +169,11 @@ function findNextWhitespacePosition(string,offset) {
  * @param tag
  * @returns {boolean}
  */
-function isBlockLevelElement(tag) {
+export function isVoidElement(tag) {
     // get element type from tag
-    var type = (tag.match(/<(\w+)/) || ['-','-'])[1];
+    var name = tag.match(/<(\w+)/);
 
-    return blockLevelElements.indexOf(type) !== -1;
-}
-
-
-/**
- * Check if element is a void element
- * http://www.w3.org/TR/html-markup/syntax.html#void-element
- *
- * @param tag
- * @returns {boolean}
- */
-function isVoidElement(tag) {
-    var voidElements = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link',
-        'meta', 'param', 'source', 'track', 'wbr'];
-
-    // get element type from tag
-    var type = (tag.match(/<(\w+)/) || ['-','-'])[1];
-
-    return voidElements.indexOf(type) !== -1;
+    return name && isVoid(name[1]);
 }
 
 /**
@@ -142,55 +182,14 @@ function isVoidElement(tag) {
  * @param allowed
  * @returns {XML|string}
  */
-function strip_tags(input, allowed) {
-    //  discuss at: http://phpjs.org/functions/strip_tags/
-    // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // improved by: Luke Godfrey
-    // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    //    input by: Pul
-    //    input by: Alex
-    //    input by: Marc Palau
-    //    input by: Brett Zamir (http://brett-zamir.me)
-    //    input by: Bobby Drake
-    //    input by: Evertjan Garretsen
-    // bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // bugfixed by: Onno Marsman
-    // bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // bugfixed by: Eric Nagel
-    // bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // bugfixed by: Tomasz Wesolowski
-    //  revised by: Rafał Kukawski (http://blog.kukawski.pl/)
-    //   example 1: strip_tags('<p>Kevin</p> <br /><b>van</b> <i>Zonneveld</i>', '<i><b>');
-    //   returns 1: 'Kevin <b>van</b> <i>Zonneveld</i>'
-    //   example 2: strip_tags('<p>Kevin <img src="someimage.png" onmouseover="someFunction()">van <i>Zonneveld</i></p>', '<p>');
-    //   returns 2: '<p>Kevin van Zonneveld</p>'
-    //   example 3: strip_tags("<a href='http://kevin.vanzonneveld.net'>Kevin van Zonneveld</a>", "<a>");
-    //   returns 3: "<a href='http://kevin.vanzonneveld.net'>Kevin van Zonneveld</a>"
-    //   example 4: strip_tags('1 < 5 5 > 1');
-    //   returns 4: '1 < 5 5 > 1'
-    //   example 5: strip_tags('1 <br/> 1');
-    //   returns 5: '1  1'
-    //   example 6: strip_tags('1 <br/> 1', '<br>');
-    //   returns 6: '1 <br/> 1'
-    //   example 7: strip_tags('1 <br/> 1', '<br><br/>');
-    //   returns 7: '1 <br/> 1'
+export function stripTags(input, allowed) {
+    // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+    const validTags = (String(allowed || '').toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
+    const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
+    const comments = /<!--[\s\S]*?-->/gi;
+    const php = /<\?(?:php)?[\s\S]*?\?>/gi;
 
-    allowed = (((allowed || '') + '')
-        .toLowerCase()
-        .match(/<[a-z][a-z0-9]*>/g) || [])
-        .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-        commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
-    return input.replace(commentsAndPhpTags, '')
-        .replace(tags, function($0, $1) {
-            return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
-        });
+    return input.replace(comments, '').replace(php, '').replace(tags, function ($0, $1) {
+        return validTags.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+    });
 }
-
-module.exports.isArray = isArray;
-module.exports.canSplit = canSplit;
-module.exports.isBlockLevelElement = isBlockLevelElement;
-module.exports.isVoidElement = isVoidElement;
-module.exports.findNextWhitespacePosition = findNextWhitespacePosition;
-module.exports.stripTags = strip_tags;

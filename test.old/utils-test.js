@@ -8,7 +8,7 @@
  * All rights reserved.
  */
 'use strict';
-/*jshint -W098 */
+/* jshint -W098 */
 /* global describe, it, before, grunt */
 var utils = require('../src/modules/utils.js'),
     expect = require('chai').expect;
@@ -18,47 +18,47 @@ var utils = require('../src/modules/utils.js'),
 /*
  Tests for helper utils - canSplit
  */
-describe('canSplit', function() {
+describe('canSplit', function () {
 
     var text = '<p>Lorem ipsum <a href="#">dolor sit amet</a>, conset<span>etur sadipscing elitr, sed</span>diam <div>nonumy eirmod</div>tempor invidunt ut labore et dolore magna aliquyam</p>';
 
-    it('should allow splitting on whitespace', function() {
-        var result = utils.canSplit(text,text.indexOf(' '));
+    it('should allow splitting on whitespace', function () {
+        var result = utils.canSplit(text, text.indexOf(' '));
         expect(result).to.equals(true);
     });
 
-    it('should allow splitting right before/after block element', function(){
+    it('should allow splitting right before/after block element', function () {
         var index = text.indexOf('</div>') + 6,
-            result = utils.canSplit(text,index);
+            result = utils.canSplit(text, index);
 
         expect(result).to.equals(true);
 
         index = text.indexOf('<div>'),
-        result = utils.canSplit(text,index);
+        result = utils.canSplit(text, index);
         expect(result).to.equals(true);
     });
 
-    it('should disallow splitting right before/after inline element', function(){
+    it('should disallow splitting right before/after inline element', function () {
         var index = text.indexOf('</span>') + 7,
-            result = utils.canSplit(text,index);
+            result = utils.canSplit(text, index);
 
         expect(result).to.equals(false);
 
         index = text.indexOf('<span>'),
-            result = utils.canSplit(text,index);
+            result = utils.canSplit(text, index);
         expect(result).to.equals(false);
     });
 
-    it(' should disallow splitting inside word', function(){
+    it(' should disallow splitting inside word', function () {
         var index = text.indexOf('Lorem') + 3,
-            result = utils.canSplit(text,index);
+            result = utils.canSplit(text, index);
 
         expect(result).to.equals(false);
     });
 
-    it(' should disallow splitting inside tag', function(){
+    it(' should disallow splitting inside tag', function () {
         var index = text.indexOf('<span>') + 3,
-            result = utils.canSplit(text,index);
+            result = utils.canSplit(text, index);
 
         expect(result).to.equals(false);
     });
@@ -67,24 +67,24 @@ describe('canSplit', function() {
 /**
  * Tests for isArray
  */
-describe('isArray', function(){
-    it('should return false for objects', function() {
+describe('isArray', function () {
+    it('should return false for objects', function () {
         var result = utils.isArray({});
         expect(result).to.equals(false);
     });
-    it('should return false for string', function() {
+    it('should return false for string', function () {
         var result = utils.isArray('no array');
         expect(result).to.equals(false);
     });
-    it('should return false for int', function() {
+    it('should return false for int', function () {
         var result = utils.isArray(1);
         expect(result).to.equals(false);
     });
-    it('should return false for function', function() {
-        var result = utils.isArray(function noop(){});
+    it('should return false for function', function () {
+        var result = utils.isArray(function noop() {});
         expect(result).to.equals(false);
     });
-    it('should return true for array', function() {
+    it('should return true for array', function () {
         var result = utils.isArray([]);
         expect(result).to.equals(true);
     });
@@ -93,16 +93,16 @@ describe('isArray', function(){
 /*
  Tests for helper utils - isVoidElement
  */
-describe('isVoidElement', function() {
-    it('should return false for div', function() {
+describe('isVoidElement', function () {
+    it('should return false for div', function () {
         var result = utils.isVoidElement('<div>');
         expect(result).to.equals(false);
     });
-    it('should return true for img (short tag)', function() {
+    it('should return true for img (short tag)', function () {
         var result = utils.isVoidElement('<img src="" />');
         expect(result).to.equals(true);
     });
-    it('should return true for img', function() {
+    it('should return true for img', function () {
         var result = utils.isVoidElement('<img src="">');
         expect(result).to.equals(true);
     });
@@ -111,7 +111,7 @@ describe('isVoidElement', function() {
 /*
  Tests for helper utils - isVoidElement
  */
-describe('findNextWhitespacePosition', function() {
+describe('findNextWhitespacePosition', function () {
     var text = '<p>Lorem ipsum <a href="#">dolor sit amet</a>, conset<span>etur sadipscing elitr, sed</span>diam<div>nonumy eirmod</div>tempor invidunt ut labore et dolore magna aliquyam</p>';
 
     /**
@@ -124,26 +124,26 @@ describe('findNextWhitespacePosition', function() {
      */
     function nextAfter(word, offset) {
         var p = text.indexOf(word) + (offset || 0) + word.length;
-        return utils.findNextWhitespacePosition(text,p);
+        return utils.findNextWhitespacePosition(text, p);
     }
 
-    it('should find first ws between lorem and ipsum', function() {
-        var result = utils.findNextWhitespacePosition(text,1);
+    it('should find first ws between lorem and ipsum', function () {
+        var result = utils.findNextWhitespacePosition(text, 1);
         expect(result).to.equals(5);
     });
-    it('should find div start tag', function() {
+    it('should find div start tag', function () {
         var result = nextAfter('elitr, ');
         expect(result).to.equals(7);
     });
-    it('should find pos after dolor', function() {
+    it('should find pos after dolor', function () {
         var result = nextAfter('a hre');
         expect(result).to.equals(5);
     });
-    it('should allow break direct after the tag is finished', function() {
+    it('should allow break direct after the tag is finished', function () {
         var result = nextAfter('</d');
         expect(result).to.equals(0);
     });
-    it('should take first ws inside div container, not after opening div', function() {
+    it('should take first ws inside div container, not after opening div', function () {
         var result = nextAfter('<di');
         expect(result).to.equals(6);
     });

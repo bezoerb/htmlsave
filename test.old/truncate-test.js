@@ -8,11 +8,11 @@
  * All rights reserved.
  */
 'use strict';
-/*jshint -W098 */
+/* jshint -W098 */
 /* global describe, it, before, grunt */
-var truncate = require('../src/modules/truncate.js'),
+var truncate = require('../dist/modules/truncate.js'),
     utils = require('../src/modules/utils.js'),
-    HTMLHint  = typeof HTMLHint === 'undefined' ? require("htmlhint").HTMLHint : false,
+    HTMLHint = typeof HTMLHint === 'undefined' ? require("htmlhint").HTMLHint : false,
     expect = require('chai').expect,
     assert = require('chai').assert;
 
@@ -22,7 +22,7 @@ var truncate = require('../src/modules/truncate.js'),
 /*
  Tests for truncate
  */
-describe('truncate', function() {
+describe('truncate', function () {
 
     var text = '<p>Lorem ipsum <a href="#">dolor sit amet</a>, conset<span>etur sadipscing elitr, sed</span>diam <div>nonumy eirmod</div>tempor invidunt ut labore et dolore magna aliquyam</p>';
 
@@ -35,61 +35,61 @@ describe('truncate', function() {
      * @param offset
      * @returns {*}
      */
-    function getResultForWord(word, offset,options) {
-        var result,length, messages,
+    function getResultForWord(word, offset, options) {
+        var result, length, messages,
             maxLength = utils.stripTags(text).indexOf(word) + word.length;
 
         if (offset) {
-            maxLength += parseInt(offset,10);
+            maxLength += parseInt(offset, 10);
         }
 
-        result = truncate(text,maxLength,options);
+        result = truncate(text, maxLength, options);
 
         messages = HTMLHint ? HTMLHint.verify(result, {'tag-pair': true}) : [];
         length = utils.stripTags(result).length;
 
 
-        expect(messages.length).to.equals(0,messages.length ? 'Htmlhint errors found: ' + messages[0].message : '');
+        expect(messages.length).to.equals(0, messages.length ? 'Htmlhint errors found: ' + messages[0].message : '');
         expect(length).to.be.at.most(maxLength);
 
         return result;
     }
 
-    it('should truncate with ellipsis', function() {
+    it('should truncate with ellipsis', function () {
         expect(getResultForWord('sit')).to.equals('<p>Lorem ipsum <a href="#">dolor...</a></p>');
     });
 
-    it('should truncate without ellipsis', function() {
-        var result = getResultForWord('sit',0,{ellipsis:false});
+    it('should truncate without ellipsis', function () {
+        var result = getResultForWord('sit', 0, {ellipsis:false});
         expect(result).to.equals('<p>Lorem ipsum <a href="#">dolor sit</a></p>');
     });
 
-    it('should strip the a tag', function() {
-        var result = getResultForWord('ipsum',3);
+    it('should strip the a tag', function () {
+        var result = getResultForWord('ipsum', 3);
         expect(result).to.equals('<p>Lorem ipsum...</p>');
     });
-    it('should remove whitespace before ellipsis', function() {
-        var result = getResultForWord('ipsum',2,{ellipsis:'..'});
+    it('should remove whitespace before ellipsis', function () {
+        var result = getResultForWord('ipsum', 2, {ellipsis:'..'});
         expect(result).to.equals('<p>Lorem ipsum..</p>');
     });
-    it('should remove ipsum', function() {
-        var result = getResultForWord('ipsum',2,{ellipsis:'...'});
+    it('should remove ipsum', function () {
+        var result = getResultForWord('ipsum', 2, {ellipsis:'...'});
         expect(result).to.equals('<p>Lorem...</p>');
     });
 
-    it('should strip the a tag', function() {
+    it('should strip the a tag', function () {
         var result = getResultForWord('ipsum', 3, {breakword: true});
         expect(result).to.equals('<p>Lorem ipsum...</p>');
     });
 
-    it('should strip the a tag', function() {
+    it('should strip the a tag', function () {
         var result = getResultForWord('ipsum', 0, {breakword: true});
         expect(result).to.equals('<p>Lorem ip...</p>');
     });
 
-    it.only('should not strip less long text', function() {
+    it.only('should not strip less long text', function () {
         var str = 'this text has 370 characters and we are truncating to 420 sensory claymore mine free-market camera Chiba jeans engine denim tube alcohol. weathered knife papier-mache artisanal corporation boy augmented reality footage otaku table modem digital city dome film boat camera car uplink beef noodles render-farm nodal point wonton soup man hotdog RAF skyscraper market human';
-        var result = truncate(str,420);
+        var result = truncate(str, 420);
         expect(result).to.equals(str);
     });
 });
