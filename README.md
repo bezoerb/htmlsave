@@ -1,5 +1,5 @@
 # htmlsave 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status](coveralls-image)](coveralls-url)
 
 HTML save string utilities for JavaScript.
 
@@ -50,10 +50,40 @@ define(['htmlsave'], function(htmlsave) {
 htmlsave.truncate("another too long text",5);
 </script>
 ```
-## Documentation
 
-* `htmlsave.truncate(<string>,<maxlength>,<options>)` method.
-* `htmlsave.slice(<string>,<maxlength>,<options>)` method.
+## API
+
+* `htmlsave.truncate(input, maxlength,<options>)` method.
+* `htmlsave.slice(input, maxlength,<options>)` method.
+
+
+#### input
+
+*Required*  
+Type: `string`
+
+#### maxlength
+
+*Required*  
+Type: `int`
+
+Max characters allowed
+
+#### options
+
+##### breakword
+Type: `boolean`
+Default value: `true`
+
+Allow script to truncate words. Disable to only allow truncating on whitespace, 
+[block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements#Elements)` and [void elements](https://www.w3.org/TR/html-markup/syntax.html#syntax-elements).
+
+##### ellipsis
+Type: `String`
+Default value: `....`
+
+End truncated string with ellipsis. This option has no effect on `slice`.
+
 
 
 ## License
@@ -71,3 +101,6 @@ Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 
 [dlcounter-url]: https://www.npmjs.com/package/htmlsave
 [dlcounter-image]: https://img.shields.io/npm/dm/htmlsave.svg
+
+[coveralls-url]: https://coveralls.io/github/bezoerb/htmlsave
+[coveralls-image]: https://coveralls.io/repos/github/bezoerb/htmlsave/badge.svg
