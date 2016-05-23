@@ -67,7 +67,7 @@ Type: `string`
 *Required*  
 Type: `int`
 
-Max characters allowed
+Max characters allowed. Use `0` for `slice` to split by word.
 
 #### options
 
