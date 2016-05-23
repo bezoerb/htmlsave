@@ -91,7 +91,7 @@ Copyright (c) 2016 Ben Zörb
 Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 
 [npm-url]: https://npmjs.org/package/htmlsave
-[npm-image]: https://badge.fury.io/js/htmlsave.svg
+[npm-image]: https://img.shields.io/npm/v/htmlsave.svg
 
 [travis-url]: https://travis-ci.org/bezoerb/htmlsave
 [travis-image]: https://secure.travis-ci.org/bezoerb/htmlsave.svg?branch=master
