@@ -122,3 +122,8 @@ test('drop too long text and keep tags', t => {
     const str = '<a href="#">abcdefghijklmnopqrstuvwxyz</a>';
     t.is(truncate(str, 10, {breakword: false}), '<a href="#">...</a>');
 });
+
+test('don\'t truncate if it\'s not needed', t => {
+    const str = 'this text has 370 characters and we are truncating to 420 sensory claymore mine free-market camera Chiba jeans engine denim tube alcohol. weathered knife papier-mache artisanal corporation boy augmented reality footage otaku table modem digital city dome film boat camera car uplink beef noodles render-farm nodal point wonton soup man hotdog RAF skyscraper market human';
+    t.is(truncate(str, 420), str);
+});
