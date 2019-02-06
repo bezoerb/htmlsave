@@ -82,8 +82,8 @@ function canSplit(string, i) {
   } // First check last character before using more expensive regex
 
 
-  const tagBefore = string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^\>]*\/>$/m));
-  const tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^\>]*>/m) || strAfter.match(/^<(\w+)[^\>]*\/>/m));
+  const tagBefore = string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^>]*\/>$/m));
+  const tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^>]*>/m) || strAfter.match(/^<(\w+)[^>]*\/>/m));
   return tagBefore && canBreak(tagBefore[1]) || tagAfter && canBreak(tagAfter[1]);
 }
 /**
@@ -228,7 +228,7 @@ function slice(string, maxLength, params) {
 
   for (let i = 0; i < length; i++) {
     // Remember last whitespace
-    if ((i === 0 || string[i] === ' ') && !tmpTag.length && !options.breakword) {
+    if ((i === 0 || string[i] === ' ') && tmpTag.length === 0 && !options.breakword) {
       if (i > 0) {
         restString = string.substr(i + 1).replace(/<[^>]*>/gm, '');
       }
@@ -241,7 +241,7 @@ function slice(string, maxLength, params) {
     } // Tag found
 
 
-    if (string[i] === '<' || tmpTag.length) {
+    if (string[i] === '<' || tmpTag.length > 0) {
       tmpTag += string[i]; // Closing Tag foung - remove last from open tags
 
       if (string[i] === '>' && /<\//.test(tmpTag)) {
@@ -384,7 +384,7 @@ function truncate(string, maxLength, params) {
 
   for (i = 0; i < length; i++) {
     // Tag found
-    if (string[i] === '<' || tmpTag.length) {
+    if (string[i] === '<' || tmpTag.length > 0) {
       tmpTag += string[i]; // Closing Tag foung - remove last from open tags
 
       if (string[i] === '>' && /<\//.test(tmpTag)) {
@@ -470,7 +470,7 @@ function truncate(string, maxLength, params) {
  * All rights reserved.
  */
 const utils = {
-  assign: assign,
+  assign,
   canSplit,
   isArray,
   isVoidElement,

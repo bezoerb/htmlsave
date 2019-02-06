@@ -101,10 +101,11 @@
       "es",
       "lib",
       "rollup.config.js",
-      "test/jasmine",
-      "test/HtmlsaveSpec.js"
+      "test"
     ],
     "rules": {
+      "prefer-destructuring": 0,
+      "no-new-object": 0,
       "valid-jsdoc": 0,
       "import/no-unresolved": 0,
       "import/no-unassigned-import": 0

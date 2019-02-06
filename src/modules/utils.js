@@ -135,9 +135,8 @@ export function canSplit(string, i) {
   }
 
   // First check last character before using more expensive regex
-  const tagBefore =
-    string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^\>]*\/>$/m));
-  const tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^\>]*>/m) || strAfter.match(/^<(\w+)[^\>]*\/>/m));
+  const tagBefore = string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^>]*\/>$/m));
+  const tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^>]*>/m) || strAfter.match(/^<(\w+)[^>]*\/>/m));
 
   return (tagBefore && canBreak(tagBefore[1])) || (tagAfter && canBreak(tagAfter[1]));
 }

@@ -1,4 +1,4 @@
-import * as utils from './utils.js';
+import * as utils from './utils';
 
 const defaults = {
   breakword: true,
@@ -41,7 +41,7 @@ export function slice(string, maxLength, params) {
 
   for (let i = 0; i < length; i++) {
     // Remember last whitespace
-    if ((i === 0 || string[i] === ' ') && !tmpTag.length && !options.breakword) {
+    if ((i === 0 || string[i] === ' ') && tmpTag.length === 0 && !options.breakword) {
       if (i > 0) {
         restString = string.substr(i + 1).replace(/<[^>]*>/gm, '');
       }
@@ -54,7 +54,7 @@ export function slice(string, maxLength, params) {
     }
 
     // Tag found
-    if (string[i] === '<' || tmpTag.length) {
+    if (string[i] === '<' || tmpTag.length > 0) {
       tmpTag += string[i];
       // Closing Tag foung - remove last from open tags
       if (string[i] === '>' && /<\//.test(tmpTag)) {

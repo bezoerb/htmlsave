@@ -13,7 +13,7 @@ export {slice} from './modules/slice';
 export {truncate} from './modules/truncate';
 
 export const utils = {
-  assign: assign,
+  assign,
   canSplit,
   isArray,
   isVoidElement,

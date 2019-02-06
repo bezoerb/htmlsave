@@ -1,4 +1,4 @@
-import * as utils from './utils.js';
+import * as utils from './utils';
 
 const defaults = {
   breakword: true,
@@ -78,7 +78,7 @@ export function truncate(string, maxLength, params) {
   // Parse string
   for (i = 0; i < length; i++) {
     // Tag found
-    if (string[i] === '<' || tmpTag.length) {
+    if (string[i] === '<' || tmpTag.length > 0) {
       tmpTag += string[i];
       // Closing Tag foung - remove last from open tags
       if (string[i] === '>' && /<\//.test(tmpTag)) {
