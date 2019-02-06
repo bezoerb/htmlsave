@@ -1,6 +1,6 @@
 # htmlsave
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![BrowserStack Status][browserstack-image]][browserstack-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 HTML save string utilities for JavaScript.
 
@@ -59,12 +59,12 @@ define(['htmlsave'], function(htmlsave) {
 
 #### input
 
-_Required_  
+_Required_
 Type: `string`
 
 #### maxlength
 
-_Required_  
+_Required_
 Type: `int`
 
 Max characters allowed. Use `0` for `slice` to split by word.
@@ -101,3 +101,5 @@ Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 [dlcounter-image]: https://img.shields.io/npm/dm/htmlsave.svg
 [coveralls-url]: https://coveralls.io/github/bezoerb/htmlsave
 [coveralls-image]: https://coveralls.io/repos/github/bezoerb/htmlsave/badge.svg
+[browserstack-url]: https://www.browserstack.com/automate/public-build/VWFkc2RXdWxuT3pNdHc4Rm01V3V0ZXR1WHBaS3N3M3lpWWgvakpFTDJXUT0tLVd5SHgyME81UWcvUU00amNLOVh6RUE9PQ==--075c829c326a2f4d98db253306e8e339ed6651db
+[browserstack-image]: https://www.browserstack.com/automate/badge.svg?badge_key=VWFkc2RXdWxuT3pNdHc4Rm01V3V0ZXR1WHBaS3N3M3lpWWgvakpFTDJXUT0tLVd5SHgyME81UWcvUU00amNLOVh6RUE9PQ==--075c829c326a2f4d98db253306e8e339ed6651db
