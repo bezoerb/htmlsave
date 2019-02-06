@@ -1,9 +1,12 @@
 sudo: false
 language: node_js
 node_js:
-  - '6'
-  - '5'
-  - '4'
-  - '0.12'
+  - '10'
+  - '8'
 
-after_success: npm run coveralls
+install:
+  - npm ci
+  - npm i -g browserstack-runner
+script: if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run test:all; else npm run test; fi
+after_success:
+  - if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run coveralls; fi

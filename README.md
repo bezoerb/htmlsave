@@ -1,13 +1,14 @@
-# htmlsave 
+# htmlsave
+
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 HTML save string utilities for JavaScript.
 
 ## Features
 
-* Truncate HTML String while preserving HTML tags and whole words.
-* Split HTML String while preserving HTML tags and whole words.
-* It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
+- Truncate HTML String while preserving HTML tags and whole words.
+- Split HTML String while preserving HTML tags and whole words.
+- It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
 
 ## Downloading htmlsave
 
@@ -29,8 +30,8 @@ You should be able to do nearly anything, and then skip to the next section anyw
 
 ```javascript
 var htmlsave = require('htmlsave');
-htmlsave.truncate("<p>lorem ipsum html text</p>",12,{
-	breakword: false
+htmlsave.truncate('<p>lorem ipsum html text</p>', 12, {
+  breakword: false,
 });
 ```
 
@@ -38,7 +39,7 @@ htmlsave.truncate("<p>lorem ipsum html text</p>",12,{
 
 ```javascript
 define(['htmlsave'], function(htmlsave) {
-   htmlsave.slice("<span>my extra long html text</span>",10);
+  htmlsave.slice('<span>my extra long html text</span>', 10);
 });
 ```
 
@@ -47,24 +48,23 @@ define(['htmlsave'], function(htmlsave) {
 ```html
 <script src="htmlsave.min.js"></script>
 <script>
-htmlsave.truncate("another too long text",5);
+  htmlsave.truncate('another too long text', 5);
 </script>
-```                                
+```
 
 ## API
 
-* `htmlsave.truncate(input, maxlength,<options>)` method.
-* `htmlsave.slice(input, maxlength,<options>)` method.
-
+- `htmlsave.truncate(input, maxlength,<options>)` method.
+- `htmlsave.slice(input, maxlength,<options>)` method.
 
 #### input
 
-*Required*  
+_Required_  
 Type: `string`
 
 #### maxlength
 
-*Required*  
+_Required_  
 Type: `int`
 
 Max characters allowed. Use `0` for `slice` to split by word.
@@ -72,35 +72,32 @@ Max characters allowed. Use `0` for `slice` to split by word.
 #### options
 
 ##### breakword
+
 Type: `boolean`
 Default value: `true`
 
-Allow script to truncate words. Disable to only allow truncating on whitespace, 
+Allow script to truncate words. Disable to only allow truncating on whitespace,
 [block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements#Elements)` and [void elements](https://www.w3.org/TR/html-markup/syntax.html#syntax-elements).
 
 ##### ellipsis
+
 Type: `String`
 Default value: `....`
 
 End truncated string with ellipsis. This option has no effect on `slice`.
 
-
-
 ## License
+
 Copyright (c) 2016 Ben Zörb
 Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 
 [npm-url]: https://npmjs.org/package/htmlsave
 [npm-image]: https://img.shields.io/npm/v/htmlsave.svg
-
 [travis-url]: https://travis-ci.org/bezoerb/htmlsave
 [travis-image]: https://secure.travis-ci.org/bezoerb/htmlsave.svg?branch=master
-
 [depstat-url]: https://david-dm.org/bezoerb/htmlsave
 [depstat-image]: https://david-dm.org/bezoerb/htmlsave.svg
-
 [dlcounter-url]: https://www.npmjs.com/package/htmlsave
 [dlcounter-image]: https://img.shields.io/npm/dm/htmlsave.svg
-
 [coveralls-url]: https://coveralls.io/github/bezoerb/htmlsave
 [coveralls-image]: https://coveralls.io/repos/github/bezoerb/htmlsave/badge.svg

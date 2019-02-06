@@ -2,17 +2,33 @@
   "name": "htmlsave",
   "version": "1.0.0",
   "description": "HTML save string utilities ",
-  "main": "dist/htmlsave.js",
+  "main": "lib/htmlsave.js",
   "scripts": {
-    "test": "xo && nyc ava",
-    "compile": "browserify src/htmlsave.js -s htmlsave -t babelify --outfile dist/htmlsave.js && uglifyjs dist/htmlsave.js -o dist/htmlsave.min.js",
-    "prepublish": "npm run compile",
+    "clean": "rimraf lib dist es coverage",
+    "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
+    "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
+    "lint": "xo",
+    "test": "jasmine --config='test/jasmine.json'",
+    "pretest": "npm run build",
+    "test:cov": "nyc npm test",
+    "test:browser": "npx browserstack-runner",
+    "test:all": "npm run test:cov && npm run test:browser",
+    "build": "rollup -c",
+    "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "files": [
-    "dist/htmlsave.js",
-    "dist/htmlsave.min.js"
+    "dist",
+    "lib",
+    "es",
+    "src"
   ],
+  "engines": {
+    "node": ">=8"
+  },
+  "unpkg": "dist/htmlsave.js",
+  "module": "es/htmlsave.js",
+  "browser": "dist/htmlsave.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:bezoerb/htmlsave.git"
@@ -42,39 +58,71 @@
     "main": "dist/htmlsave.js"
   },
   "devDependencies": {
-    "ava": "^0.14.0",
-    "babel-core": "^6.7.4",
-    "babel-plugin-transform-es2015-modules-umd": "^6.6.5",
-    "babel-polyfill": "^6.9.0",
-    "babel-preset-es2015": "^6.6.0",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "coveralls": "^2.11.9",
-    "htmlhint": "^0.9.6",
-    "nyc": "^6.1.1",
-    "object-assign": "^4.1.0",
-    "rollupify": "^0.3.1",
-    "uglify-js": "^2.6.2",
-    "xo": "^0.13.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "browserstack-runner": "^0.9.0",
+    "core-js": "^2.6.3",
+    "coveralls": "^3.0.2",
+    "htmlhint": "^0.10.1",
+    "jasmine": "^3.3.1",
+    "jsdom": "^13.2.0",
+    "nyc": "^13.2.0",
+    "prettier": "^1.16.1",
+    "regenerator-runtime": "^0.13.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-terser": "^4.0.2",
+    "xo": "^0.24.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 120,
+    "bracketSpacing": false
   },
   "xo": {
-    "space": 4,
+    "space": 2,
+    "prettier": true,
     "ignores": [
-      "dist/measure-text.js",
-      "dist/measure-text.min.js"
-    ]
-  },
-  "ava": {
-    "files": [
-      "test/*.js"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "es2015"
+      "dist",
+      "es",
+      "lib",
+      "rollup.config.js",
+      "test/jasmine",
+      "test/HtmlsaveSpec.js"
     ],
-    "plugins": [
-      "transform-es2015-modules-umd"
-    ]
+    "rules": {
+      "valid-jsdoc": 0,
+      "import/no-unresolved": 0,
+      "import/no-unassigned-import": 0
+    }
+  },
+  "npmName": "htmlsave",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ],
+  "jest": {
+    "testEnvironment": "./test/helpers/environment.js",
+    "transform": {
+      "^.+\\.(js|jsx)?$": "babel-jest"
+    }
   }
 }

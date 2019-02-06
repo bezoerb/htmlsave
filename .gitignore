@@ -27,3 +27,9 @@ bower_components
 
 .nyc_output
 
+dist
+lib
+es
+coverage
+
+
