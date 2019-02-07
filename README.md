@@ -77,7 +77,7 @@ Type: `boolean`
 Default value: `true`
 
 Allow script to truncate words. Disable to only allow truncating on whitespace,
-[block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements#Elements)` and [void elements](https://www.w3.org/TR/html-markup/syntax.html#syntax-elements).
+[block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements#Elements) and [void elements](https://www.w3.org/TR/html-markup/syntax.html#syntax-elements).
 
 ##### ellipsis
 
