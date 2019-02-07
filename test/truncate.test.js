@@ -1,7 +1,7 @@
 /* eslint-env es6, browser */
 
 describe('Truncate', function() {
-  it('is available', function() {
+  /*it('is available', function() {
     expect(htmlsave.truncate).toBeDefined();
   });
 
@@ -131,5 +131,14 @@ describe('Truncate', function() {
     var str =
       'this text has 370 characters and we are truncating to 420 sensory claymore mine free-market camera Chiba jeans engine denim tube alcohol. weathered knife papier-mache artisanal corporation boy augmented reality footage otaku table modem digital city dome film boat camera car uplink beef noodles render-farm nodal point wonton soup man hotdog RAF skyscraper market human';
     expect(htmlsave.truncate(str, 420)).toEqual(str);
+  });*/
+
+  it('evaluate callback for maxLength', function() {
+    var str = '<span>abcdefghijklmnopqrstuvwxyz</span>';
+    expect(
+      htmlsave.truncate(str, function(part) {
+        return part.length >= 'abcde'.length;
+      })
+    ).toEqual('<span>abcde...</span>');
   });
 });

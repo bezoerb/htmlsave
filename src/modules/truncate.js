@@ -26,7 +26,7 @@ const defaults = {
  * @method truncate
  * @alias abbreviate
  * @param {String} string string needs to be truncated
- * @param {Number} maxLength length of truncated string
+ * @param {Number|function} maxLength length of truncated string
  * @param {Object} params (optional)
  * @param {Boolean} [params.breakword] flag to specify if words should be splitted, false by default
  * @param {Boolean|String} [params.ellipsis] omission symbol for truncated string, '...' by default
@@ -40,14 +40,22 @@ export function truncate(string, maxLength, params) {
   let tmpTag = '';
   const openTags = [];
   const restString = string.replace(/<[^>]*>/gm, '');
-  const strippedLength = utils.stripTags(string).length;
+  const stripped = utils.stripTags(string);
+  const strippedLength = stripped.length;
   let i;
   let j;
 
   const options = utils.assign({}, defaults, params || {});
 
+  const useCb = typeof maxLength === 'function';
+  const cb = useCb
+    ? maxLength
+    : function() {
+        return false;
+      };
+
   // Nothing to do
-  if (strippedLength <= maxLength) {
+  if (!useCb || strippedLength <= maxLength) {
     return string;
   }
 
@@ -57,21 +65,21 @@ export function truncate(string, maxLength, params) {
   }
 
   // Negative maxlength should count from the end
-  if (maxLength < 0) {
+  if (!useCb && maxLength < 0) {
     maxLength = restString.length + maxLength;
   }
 
   // Compute length of ellipsis
   if (typeof options.ellipsis === 'string') {
     elength = options.ellipsis.length;
-    if (elength > maxLength) {
+    if (!useCb && elength > maxLength) {
       options.ellipsis = options.ellipsis.substr(0, maxLength);
       elength = options.ellipsis.length;
     }
   }
 
   // Throw an error if maxlength is less or equala ellipsis length
-  if (elength >= maxLength) {
+  if (!useCb && elength >= maxLength) {
     throw new Error('htmlsave.truncate: Maxlength is less or equal ellipsis length');
   }
 
@@ -100,9 +108,9 @@ export function truncate(string, maxLength, params) {
       tmp += string[i];
     }
 
-    let done = options.breakword && tmpLength === maxLength - elength;
+    let done = cb(stripped.substring(0, tmpLength)) || (options.breakword && tmpLength === maxLength - elength);
 
-    if (!options.breakword) {
+    if (!useCb && !options.breakword) {
       let possibleEnd = utils.whitespacePos(string, i) === 0;
 
       // Create trimmed string to get the characters to the "next" whitespace
