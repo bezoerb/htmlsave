@@ -81,73 +81,73 @@ describe('Utils', function() {
       expect(htmlsave.utils.isVoidElement('<img src="">')).toBeTruthy();
     });
   });
-  describe('WhitespacePos', function() {
-    it('find first ws between lorem and ipsum', function() {
-      expect(htmlsave.utils.whitespacePos(text, 3)).toEqual(5);
-    });
-    it('find div start tag', function() {
-      expect(htmlsave.utils.whitespacePos(text, offsetAfter('elitr, '))).toEqual(7);
-    });
-    it('find pos after dolor', function() {
-      expect(htmlsave.utils.whitespacePos(text, offsetAfter('a hre'))).toEqual(5);
-    });
-    it('allow break direct after the tag is finished', function() {
-      expect(htmlsave.utils.whitespacePos(text, offsetAfter('</d'))).toEqual(0);
-    });
-    it('take first ws inside div container, not after opening div', function() {
-      expect(htmlsave.utils.whitespacePos(text, offsetAfter('<di'))).toEqual(6);
-    });
-    it('take first ws inside div container, not after opening div', function() {
-      expect(htmlsave.utils.whitespacePos('link<br/>to my contents</a><span>Test</span>')).toEqual(4);
-    });
-    it('find whitespace on whitespace', function() {
-      expect(htmlsave.utils.whitespacePos('    ', 0)).toEqual(0);
-    });
-    it('find whitespace on tab', function() {
-      expect(htmlsave.utils.whitespacePos('\t   ', 0)).toEqual(0);
-    });
-    it('find whitespace before br', function() {
-      expect(htmlsave.utils.whitespacePos('<br/>1 2', 0)).toEqual(0);
-    });
-    it('find whitespace when inside br', function() {
-      expect(htmlsave.utils.whitespacePos('<br/>12 2', 3)).toEqual(0);
-    });
-    it('find whitespace string', function() {
-      expect(htmlsave.utils.whitespacePos('abc def', 0)).toEqual(3);
-    });
-    it('handle tag with missing start', function() {
-      expect(htmlsave.utils.whitespacePos('v class="abc">abc def', 0)).toEqual(3);
-    });
-  });
-  describe('NextWhitespacePos', function() {
-    it('next whitespace on whitespace', function() {
-      expect(htmlsave.utils.nextWhitespacePos('    ', 0)).toEqual(1);
-    });
-    it('next whitespace on tab', function() {
-      expect(htmlsave.utils.nextWhitespacePos('\t   ', 0)).toEqual(1);
-    });
-    it('next whitespace before br', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<br/>12 2', 0)).toEqual(2);
-    });
-    it('next whitespace inside br', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<br/>12 2', 3)).toEqual(2);
-    });
-    it('next whitespace string', function() {
-      expect(htmlsave.utils.nextWhitespacePos('abc def', 0)).toEqual(3);
-    });
-    it('next whitespace string', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 2)).toEqual(2);
-    });
-    it('next whitespace string', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 3)).toEqual(2);
-    });
-    it('next whitespace string', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 5)).toEqual(7);
-    });
-    it('next whitespace string', function() {
-      expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 13)).toEqual(0);
-    });
-  });
+  // describe('WhitespacePos', function() {
+  //   it('find first ws between lorem and ipsum', function() {
+  //     expect(htmlsave.utils.whitespacePos(text, 3)).toEqual(5);
+  //   });
+  //   it('find div start tag', function() {
+  //     expect(htmlsave.utils.whitespacePos(text, offsetAfter('elitr, '))).toEqual(7);
+  //   });
+  //   it('find pos after dolor', function() {
+  //     expect(htmlsave.utils.whitespacePos(text, offsetAfter('a hre'))).toEqual(5);
+  //   });
+  //   it('allow break direct after the tag is finished', function() {
+  //     expect(htmlsave.utils.whitespacePos(text, offsetAfter('</d'))).toEqual(0);
+  //   });
+  //   it('take first ws inside div container, not after opening div', function() {
+  //     expect(htmlsave.utils.whitespacePos(text, offsetAfter('<di'))).toEqual(6);
+  //   });
+  //   it('take first ws inside div container, not after opening div', function() {
+  //     expect(htmlsave.utils.whitespacePos('link<br/>to my contents</a><span>Test</span>')).toEqual(4);
+  //   });
+  //   it('find whitespace on whitespace', function() {
+  //     expect(htmlsave.utils.whitespacePos('    ', 0)).toEqual(0);
+  //   });
+  //   it('find whitespace on tab', function() {
+  //     expect(htmlsave.utils.whitespacePos('\t   ', 0)).toEqual(0);
+  //   });
+  //   it('find whitespace before br', function() {
+  //     expect(htmlsave.utils.whitespacePos('<br/>1 2', 0)).toEqual(0);
+  //   });
+  //   it('find whitespace when inside br', function() {
+  //     expect(htmlsave.utils.whitespacePos('<br/>12 2', 3)).toEqual(0);
+  //   });
+  //   it('find whitespace string', function() {
+  //     expect(htmlsave.utils.whitespacePos('abc def', 0)).toEqual(3);
+  //   });
+  //   it('handle tag with missing start', function() {
+  //     expect(htmlsave.utils.whitespacePos('v class="abc">abc def', 0)).toEqual(3);
+  //   });
+  // });
+  // describe('NextWhitespacePos', function() {
+  //   it('next whitespace on whitespace', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('    ', 0)).toEqual(1);
+  //   });
+  //   it('next whitespace on tab', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('\t   ', 0)).toEqual(1);
+  //   });
+  //   it('next whitespace before br', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<br/>12 2', 0)).toEqual(2);
+  //   });
+  //   it('next whitespace inside br', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<br/>12 2', 3)).toEqual(2);
+  //   });
+  //   it('next whitespace string', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('abc def', 0)).toEqual(3);
+  //   });
+  //   it('next whitespace string', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 2)).toEqual(2);
+  //   });
+  //   it('next whitespace string', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 3)).toEqual(2);
+  //   });
+  //   it('next whitespace string', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 5)).toEqual(7);
+  //   });
+  //   it('next whitespace string', function() {
+  //     expect(htmlsave.utils.nextWhitespacePos('<p>12 3456789</p>', 13)).toEqual(0);
+  //   });
+  // });
   describe('isArray', function() {
     it('{} is no array', function() {
       expect(htmlsave.utils.isArray({})).toBeFalsy();

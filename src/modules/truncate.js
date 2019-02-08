@@ -132,11 +132,6 @@ export function truncate(string, maxLength, params) {
         count = part.length;
       }
 
-      //  Let possibleEnd = utils.whitespacePos(string, i) === 0;
-
-      // Create trimmed string to get the characters to the "next" whitespace
-      //  const count = utils.nextWhitespacePos(string, i);
-
       // Check if we need ellipsis
       let next = tmpLength + count - 1;
       if (next < strippedLength) {

@@ -7,7 +7,7 @@
  * http://bezoerb.mit-license.org/
  * All rights reserved.
  */
-import {assign, canSplit, isArray, isVoidElement, nextWhitespacePos, stripTags, whitespacePos} from './modules/utils';
+import {assign, canSplit, isArray, isVoidElement, stripTags} from './modules/utils';
 
 export {slice} from './modules/slice';
 export {truncate} from './modules/truncate';
@@ -17,7 +17,5 @@ export const utils = {
   canSplit,
   isArray,
   isVoidElement,
-  nextWhitespacePos,
   stripTags,
-  whitespacePos,
 };
