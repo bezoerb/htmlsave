@@ -1,21 +1,19 @@
+# v1.1.0 / 2019-02-09
 
-v1.1.0 / 2019-02-09
-==================
-
-  * remove unused code
-  * fix: reduces used browsers to meet bs limit
-  * Make tests compatible with older browsers
-  * Start browserstack after travis succeeds
-  * fix: improved performance
-  * fixed typo
-  * add browserstack badge
-  * added browserstack credentials
-  * removed dist
-  * eslint fixes
-  * new tooling
-  * added test for #2
-  * changelog
-  * update bower json
+- remove unused code
+- fix: reduces used browsers to meet bs limit
+- Make tests compatible with older browsers
+- Start browserstack after travis succeeds
+- fix: improved performance
+- fixed typo
+- add browserstack badge
+- added browserstack credentials
+- removed dist
+- eslint fixes
+- new tooling
+- added test for #2
+- changelog
+- update bower json
 
 # v1.0.0 / 2016-05-23
 
