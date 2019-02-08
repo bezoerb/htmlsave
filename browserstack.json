@@ -19,20 +19,6 @@
     {
       "browser": "chrome",
       "browser_version": "latest",
-      "os": "OS X",
-      "os_version": "Mountain Lion",
-      "cli_key": 3
-    },
-    {
-      "browser": "firefox",
-      "browser_version": "latest",
-      "os": "Windows",
-      "os_version": "7",
-      "cli_key": 4
-    },
-    {
-      "browser": "chrome",
-      "browser_version": "latest",
       "os": "Windows",
       "os_version": "7",
       "cli_key": 5
