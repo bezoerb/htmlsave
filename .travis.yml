@@ -1,16 +1,15 @@
 sudo: false
 language: node_js
 node_js:
-- '10'
-- '8'
+  - '10'
+  - '8'
 install:
-- npm ci
-- npm i -g browserstack-runner
-script: if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run test:all; else npm run
-  test; fi
+  - npm ci
+  - npm i -g browserstack-runner
+script: if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run test:cov; else npm run test; fi
 after_success:
-- if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run coveralls; fi
+  - if [[ "$TRAVIS_NODE_VERSION" = "10" ]]; then npm run coveralls; npm run browserstack; fi
 env:
   global:
-  - secure: IZkJiYwnIDoPoyLSL5SP4ZaEqUKCozlFCBd0kV7X/GJ3SGoEK3OHc+Wv3ix2UJDRxWj66aFhaczhUe8EqCnxSm+kzascECFlAjgpEATg1aGSP/Y0L9HsuUqS7k2b4fpt8XRUlDdLCPHChBZSl41j2UCYOyL2hlqDXvTxk6vt4VY=
-  - secure: FVsXh7aVAwS79nHQsmddyHHyY8ePsYjSeSXEMuucRPFc/Np/cb1/XWASz43sg8RS4hZdvO8rzVEzm/H+4nEBYBflt5gNXK70U9+F7byOfvPPlP/Dxnh6WOc8ErsBQIEad6bYSY9sY4AgltbqxNiaLphNkoX/cVGJsSTy47gPbSk=
+    - secure: IZkJiYwnIDoPoyLSL5SP4ZaEqUKCozlFCBd0kV7X/GJ3SGoEK3OHc+Wv3ix2UJDRxWj66aFhaczhUe8EqCnxSm+kzascECFlAjgpEATg1aGSP/Y0L9HsuUqS7k2b4fpt8XRUlDdLCPHChBZSl41j2UCYOyL2hlqDXvTxk6vt4VY=
+    - secure: FVsXh7aVAwS79nHQsmddyHHyY8ePsYjSeSXEMuucRPFc/Np/cb1/XWASz43sg8RS4hZdvO8rzVEzm/H+4nEBYBflt5gNXK70U9+F7byOfvPPlP/Dxnh6WOc8ErsBQIEad6bYSY9sY4AgltbqxNiaLphNkoX/cVGJsSTy47gPbSk=

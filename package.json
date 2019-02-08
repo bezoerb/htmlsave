@@ -11,10 +11,9 @@
     "test": "jasmine --config='test/jasmine.json'",
     "pretest": "npm run build",
     "test:cov": "nyc npm test",
-    "test:browser": "npx browserstack-runner",
-    "test:all": "npm run test:cov && npm run test:browser",
     "build": "rollup -c",
     "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
+    "browserstack": "npx browserstack-runner",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "files": [
