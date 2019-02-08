@@ -10,7 +10,9 @@ var text =
  * @param offset
  * @returns {*}
  */
-var offsetAfter = (word, offset) => text.indexOf(word) + (offset || 0) + word.length;
+var offsetAfter = function(word, offset) {
+  return text.indexOf(word) + (offset || 0) + word.length;
+};
 
 describe('Utils', function() {
   describe('CanSplit', function() {
@@ -173,7 +175,7 @@ describe('Utils', function() {
     it('preserve property order', function() {
       var letters = 'abcdefghijklmnopqrst';
       var source = {};
-      letters.split('').forEach(letter => {
+      letters.split('').forEach(function(letter) {
         source[letter] = letter;
       });
       var target = htmlsave.utils.assign({}, source);
