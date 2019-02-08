@@ -4,6 +4,15 @@ describe('Slice', function() {
     expect(htmlsave.slice).toBeDefined();
   });
 
+  it('performs', function() {
+    var str =
+      'Lorem ipsum <b>dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</b> eirmod <i>tempor invidunt</i> ut labore <span class="red">et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</span>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+    var t0 = performance.now();
+    htmlsave.slice(str, [38, 40, 41, 45, 37, 39, 42, 44, 40, 41, 45, 44, 42, 39], {breakword: false});
+    var t1 = performance.now();
+    expect(t1 - t0).toBeLessThan(20);
+  });
+
   it('slice normal content disabled breakword', function() {
     var options = {breakword: false};
     var str = '<a href="#content">This is a link to my content</a>';
@@ -79,7 +88,6 @@ describe('Slice', function() {
   it('handle void elements', function() {
     var str2 = '<a href="#content">This is a link<br/>to my contents</a><span>Test</span>';
     var parts2 = htmlsave.slice(str2, 14, {breakword: false});
-
     expect(parts2.length).toEqual(3);
     expect(parts2[0]).toEqual('<a href="#content">This is a link<br/></a>');
     expect(parts2[1]).toEqual('<a href="#content">to my </a>');

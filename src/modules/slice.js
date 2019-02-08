@@ -16,12 +16,11 @@ function getMax(val) {
 /**
  * Split HTML string and keep tag safe.
  *
- * @method truncate
- * @param {String} string string needs to be truncated
- * @param {Number|Array} maxLength length of truncated string when array is provided use as breakpoints
+ * @method slice
+ * @param {String} string string needs to be sliced
+ * @param {Number|Array} maxLength length of sliced string when array is provided use as breakpoints
  * @param {Object} params (optional)
  * @param {Boolean} [params.breakword] flag to specify if words should be splitted, false by default
- * @param {Boolean|String} [params.ellipsis] omission symbol for truncated string, '...' by default
  * @return {Array} String parts
  */
 export function slice(string, maxLength, params) {
@@ -34,10 +33,10 @@ export function slice(string, maxLength, params) {
   const openTagsReverse = [];
   let ws = 0;
   let restString = string.replace(/<[^>]*>/gm, '');
-
   const max = getMax(maxLength);
-
   const options = utils.assign({}, defaults, params || {});
+
+  const whitespaces = utils.getWhitespaces(string);
 
   for (let i = 0; i < length; i++) {
     // Remember last whitespace
@@ -85,14 +84,22 @@ export function slice(string, maxLength, params) {
     let cycleComplete = options.breakword && tmpLength >= max() && notag;
 
     if (!options.breakword && notag) {
-      const possibleEnd = utils.whitespacePos(string, i) === 0;
+      let index = i;
+      let wsi = whitespaces.indexOf(i);
+      const fWsi = whitespaces.indexOf(i + 1);
+      if (string.length > i && !/\s/.test(string[i + 1]) && fWsi >= 0) {
+        wsi = fWsi;
+        index = i + 1;
+      }
 
-      // Create trimmed string to get the characters to the "next" whitespace
-      const count = utils.nextWhitespacePos(string, i);
-
-      const next = tmpLength + count;
-
-      cycleComplete = possibleEnd && next > max();
+      if (wsi >= 0) {
+        const rawpart =
+          wsi < whitespaces.length - 1
+            ? string.substring(index + 1, whitespaces[wsi + 1])
+            : string.substring(index + 1);
+        const part = utils.stripTags(rawpart);
+        cycleComplete = tmpLength + part.length > max();
+      }
     }
 
     // Prevent empty closing tags at the end

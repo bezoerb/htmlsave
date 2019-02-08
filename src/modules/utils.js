@@ -215,6 +215,28 @@ export function nextWhitespacePos(string, offset = 0) {
 }
 
 /**
+ * Get array of break indices
+ * @param {*} string
+ */
+export function getWhitespaces(string) {
+  const result = [];
+  const regex = new RegExp('((?:\\s)|</?(?:(?:' + breakElements.join(')|(?:') + '))(?:/?>|(?:\\s[^>]*>)))', 'gm');
+
+  string.replace(regex, (match, p1, offset, string) => {
+    const insideTag = string.lastIndexOf('<', offset) > string.lastIndexOf('>', offset);
+    if (match.startsWith('</') || match.endsWith('/>')) {
+      result.push(offset + match.length);
+    } else if (!insideTag) {
+      result.push(offset);
+    }
+
+    return match;
+  });
+
+  return result;
+}
+
+/**
  * Check if element is a void element
  * http://www.w3.org/TR/html-markup/syntax.html#void-element
  *

@@ -38,9 +38,11 @@ export function truncate(string, maxLength, params) {
   let tmp = '';
   let elength = 0;
   let tmpTag = '';
+  let lastTag = '';
   const openTags = [];
   const restString = string.replace(/<[^>]*>/gm, '');
   const strippedLength = utils.stripTags(string).length;
+  const whitespaces = utils.getWhitespaces(string);
   let i;
   let j;
 
@@ -83,16 +85,19 @@ export function truncate(string, maxLength, params) {
       // Closing Tag foung - remove last from open tags
       if (string[i] === '>' && /<\//.test(tmpTag)) {
         tmp += tmpTag;
+        lastTag = tmpTag;
         tmpTag = '';
         openTags.pop();
         // Tag found which closes itself - just append to string
       } else if (string[i] === '>' && utils.isVoidElement(tmpTag)) {
         tmp += tmpTag;
+        lastTag = tmpTag;
         tmpTag = '';
         // Opening tag found
       } else if (string[i] === '>') {
         tmp += tmpTag;
         openTags.push(tmpTag);
+        lastTag = tmpTag;
         tmpTag = '';
       }
     } else {
@@ -103,10 +108,34 @@ export function truncate(string, maxLength, params) {
     let done = options.breakword && tmpLength === maxLength - elength;
 
     if (!options.breakword) {
-      let possibleEnd = utils.whitespacePos(string, i) === 0;
+      let index = i;
+      let wsi = whitespaces.indexOf(i);
+      const fWsi = whitespaces.indexOf(i + 1);
+      if (string.length > i && !/\s/.test(string[i + 1]) && fWsi >= 0) {
+        wsi = fWsi;
+        index = i + 1;
+      }
+
+      let count = 0;
+      let possibleEnd = wsi >= 0;
+      if (possibleEnd) {
+        const rawpart =
+          wsi < whitespaces.length - 1
+            ? string.substring(index + 1, whitespaces[wsi + 1])
+            : string.substring(index + 1);
+        const part = utils.stripTags(rawpart);
+        count = part.length;
+        // CycleComplete = tmpLength + part.length > max();
+      } else {
+        const rawpart = string.substring(index + 1, whitespaces.find(index => index > i));
+        const part = utils.stripTags(rawpart);
+        count = part.length;
+      }
+
+      //  Let possibleEnd = utils.whitespacePos(string, i) === 0;
 
       // Create trimmed string to get the characters to the "next" whitespace
-      const count = utils.nextWhitespacePos(string, i);
+      //  const count = utils.nextWhitespacePos(string, i);
 
       // Check if we need ellipsis
       let next = tmpLength + count - 1;
@@ -131,6 +160,10 @@ export function truncate(string, maxLength, params) {
       if (string[i] === ' ') {
         tmp = tmp.substr(0, tmp.length - 1);
         tmpLength--;
+      }
+
+      if (tmp.endsWith('>') && utils.isVoidElement(lastTag)) {
+        tmp = tmp.substring(0, tmp.lastIndexOf('<'));
       }
 
       if (openTags.length === 0 && options.ellipsis && tmp.length < string.length) {
