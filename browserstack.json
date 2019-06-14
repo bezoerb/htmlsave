@@ -24,13 +24,6 @@
       "cli_key": 5
     },
     {
-      "browser": "ie",
-      "browser_version": "11.0",
-      "os": "Windows",
-      "os_version": "7",
-      "cli_key": 8
-    },
-    {
       "browser": "edge",
       "browser_version": "16.0",
       "os": "Windows",
