@@ -13,8 +13,15 @@
       "browser": "safari",
       "browser_version": "latest",
       "os": "OS X",
-      "os_version": "Mountain Lion",
+      "os_version": "Mojave",
       "cli_key": 2
+    },
+    {
+      "browser": "chrome",
+      "browser_version": "latest",
+      "os": "OS X",
+      "os_version": "Mojave",
+      "cli_key": 3
     },
     {
       "browser": "chrome",
@@ -29,6 +36,13 @@
       "os": "Windows",
       "os_version": "10",
       "cli_key": 9
+    },
+    {
+      "browser": "edge",
+      "browser_version": "latest",
+      "os": "Windows",
+      "os_version": "10",
+      "cli_key": 10
     }
   ]
 }
