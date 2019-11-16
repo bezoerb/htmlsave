@@ -127,7 +127,10 @@ export function truncate(string, maxLength, params) {
         count = part.length;
         // CycleComplete = tmpLength + part.length > max();
       } else {
-        const rawpart = string.substring(index + 1, whitespaces.find(index => index > i));
+        const rawpart = string.substring(
+          index + 1,
+          whitespaces.find(index => index > i)
+        );
         const part = utils.stripTags(rawpart);
         count = part.length;
       }

@@ -3806,8 +3806,14 @@ getJasmineRequireObj().matchersUtil = function(j$) {
       });
 
       // For both sets, check they are all contained in the other set
-      var setPairs = [[valuesA, valuesB], [valuesB, valuesA]];
-      var stackPairs = [[aStack, bStack], [bStack, aStack]];
+      var setPairs = [
+        [valuesA, valuesB],
+        [valuesB, valuesA],
+      ];
+      var stackPairs = [
+        [aStack, bStack],
+        [bStack, aStack],
+      ];
       var baseValues, baseValue, baseStack;
       var otherValues, otherValue, otherStack;
       var found;
