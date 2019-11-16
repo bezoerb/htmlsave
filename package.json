@@ -107,7 +107,10 @@
       "no-new-object": 0,
       "valid-jsdoc": 0,
       "import/no-unresolved": 0,
-      "import/no-unassigned-import": 0
+      "import/no-unassigned-import": 0,
+      "unicorn/prefer-string-slice": 0,
+      "unicorn/no-for-loop": 0,
+      "unicorn/prefer-includes": 0
     }
   },
   "npmName": "htmlsave",
