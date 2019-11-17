@@ -101,5 +101,5 @@ Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 [dlcounter-image]: https://img.shields.io/npm/dm/htmlsave.svg
 [coveralls-url]: https://coveralls.io/github/bezoerb/htmlsave
 [coveralls-image]: https://coveralls.io/repos/github/bezoerb/htmlsave/badge.svg
-[browserstack-url]: https://www.browserstack.com/automate/public-build/VWFkc2RXdWxuT3pNdHc4Rm01V3V0ZXR1WHBaS3N3M3lpWWgvakpFTDJXUT0tLVd5SHgyME81UWcvUU00amNLOVh6RUE9PQ==--075c829c326a2f4d98db253306e8e339ed6651db
-[browserstack-image]: https://www.browserstack.com/automate/badge.svg?badge_key=VWFkc2RXdWxuT3pNdHc4Rm01V3V0ZXR1WHBaS3N3M3lpWWgvakpFTDJXUT0tLVd5SHgyME81UWcvUU00amNLOVh6RUE9PQ==--075c829c326a2f4d98db253306e8e339ed6651db
+[browserstack-url]: https://automate.browserstack.com/public-build/WXBURm85eG9PUlB5eGhMMnIzQzlPdysvV3ZVMnRoeFdtN0gvbUM3UEZvQT0tLUpuTVd1Zk5ocGQ0Nkk4QmhiZEh1SVE9PQ==--b3f80db5ae4dc1da53a7967a322d741258dd1ded
+[browserstack-image]: https://automate.browserstack.com/badge.svg?badge_key=WXBURm85eG9PUlB5eGhMMnIzQzlPdysvV3ZVMnRoeFdtN0gvbUM3UEZvQT0tLUpuTVd1Zk5ocGQ0Nkk4QmhiZEh1SVE9PQ==--b3f80db5ae4dc1da53a7967a322d741258dd1ded
