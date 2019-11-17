@@ -10,7 +10,7 @@ describe('Slice', function() {
     var t0 = performance.now();
     htmlsave.slice(str, [38, 40, 41, 45, 37, 39, 42, 44, 40, 41, 45, 44, 42, 39], {breakword: false});
     var t1 = performance.now();
-    expect(t1 - t0).toBeLessThan(20);
+    expect(t1 - t0).toBeLessThan(25);
   });
 
   it('slice normal content disabled breakword', function() {
