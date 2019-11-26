@@ -45,6 +45,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu') && matrix.node == 10
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Run Browserstack
         if: startsWith(matrix.os, 'ubuntu') && matrix.node == 10
         run: npm run browserstack

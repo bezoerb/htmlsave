@@ -6,13 +6,12 @@
   "scripts": {
     "clean": "rimraf lib dist es coverage",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
-    "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "lint": "xo",
     "test": "jasmine --config='test/jasmine.json'",
     "pretest": "npm run build",
-    "test:cov": "nyc npm test",
+    "test:cov": "nyc npm test && nyc report --reporter=lcov",
     "build": "rollup -c",
-    "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
+    "prepare": "npm run clean && npm run lint && npm test",
     "browserstack": "npx browserstack-runner",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
