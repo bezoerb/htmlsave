@@ -1,6 +1,6 @@
 # htmlsave
 
-[![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Build Status][travis-image]][travis-url] [![BrowserStack Status][browserstack-image]][browserstack-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![BrowserStack Status][browserstack-image]][browserstack-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 HTML save string utilities for JavaScript.
 
@@ -95,8 +95,6 @@ Licensed under the [MIT license](http://bezoerb.mit-license.org/).
 [npm-image]: https://img.shields.io/npm/v/htmlsave.svg
 [ci-url]: https://github.com/bezoerb/htmlsave/actions?workflow=Tests
 [ci-image]: https://github.com/bezoerb/htmlsave/workflows/Tests/badge.svg
-[travis-url]: https://travis-ci.org/bezoerb/htmlsave
-[travis-image]: https://secure.travis-ci.org/bezoerb/htmlsave.svg?branch=master
 [depstat-url]: https://david-dm.org/bezoerb/htmlsave
 [depstat-image]: https://david-dm.org/bezoerb/htmlsave.svg
 [dlcounter-url]: https://www.npmjs.com/package/htmlsave
