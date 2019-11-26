@@ -29,7 +29,7 @@ export default [
     output: {file: 'es/htmlsave.mjs', format: 'es', indent: false},
     plugins: [
       nodeResolve({
-        jsnext: true,
+        mainFields: ['module', 'main'],
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
@@ -56,7 +56,7 @@ export default [
     },
     plugins: [
       nodeResolve({
-        jsnext: true,
+        mainFields: ['module', 'main'],
       }),
       babel({
         exclude: 'node_modules/**',
@@ -78,7 +78,7 @@ export default [
     },
     plugins: [
       nodeResolve({
-        jsnext: true,
+        mainFields: ['module', 'main'],
       }),
       babel({
         exclude: 'node_modules/**',
@@ -108,8 +108,7 @@ export default [
     },
     plugins: [
       nodeResolve({
-        jsnext: true,
-        main: true,
+        mainFields: ['module', 'main'],
         browser: true,
       }),
       commonjs({include: 'node_modules/**'}),
@@ -125,6 +124,7 @@ export default [
               },
               modules: false,
               useBuiltIns: 'usage', //enables babel and import babel into your inputFile.js
+              corejs: { version: 3, proposals: true },
             },
           ],
         ],
@@ -147,8 +147,7 @@ export default [
     },
     plugins: [
       nodeResolve({
-        jsnext: true,
-        main: true,
+        mainFields: ['module', 'main'],
         browser: true,
       }),
       commonjs({include: 'node_modules/**'}),
@@ -164,6 +163,7 @@ export default [
               },
               modules: false,
               useBuiltIns: 'usage', //enables babel and import babel into your inputFile.js
+              corejs: { version: 3, proposals: true },
             },
           ],
         ],
