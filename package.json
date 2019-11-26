@@ -7,7 +7,7 @@
     "clean": "rimraf lib dist es coverage",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "lint": "xo --fix",
-    "test": "jasmine --config='test/jasmine.json'",
+    "test": "jasmine --config=./test/jasmine.json",
     "pretest": "npm run build",
     "test:cov": "nyc npm test && nyc report --reporter=lcov",
     "build": "rollup -c",
