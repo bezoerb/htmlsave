@@ -48,5 +48,5 @@ jobs:
 
       - name: Run Browserstack
         if: startsWith(matrix.os, 'ubuntu') && matrix.node == 10
-        run: npm run browserstack
+        run: npm run browserstack -- --username ${{ secrets.BROWSERSTACK_USERNAME }} --key ${{ secrets.BROWSERSTACK_key }}
        
