@@ -32,12 +32,12 @@ const defaults = {
  * @param {Boolean|String} [params.ellipsis] omission symbol for truncated string, '...' by default
  * @return {Array} String parts
  */
-export function truncate(string, maxLength, params) {
+export function truncate(string, maxLength, parameters) {
   const length = string.length;
-  let tmpLength = 0;
-  let tmp = '';
+  let temporaryLength = 0;
+  let temporary = '';
   let elength = 0;
-  let tmpTag = '';
+  let temporaryTag = '';
   let lastTag = '';
   const openTags = [];
   const restString = string.replace(/<[^>]*>/gm, '');
@@ -46,7 +46,7 @@ export function truncate(string, maxLength, params) {
   let i;
   let j;
 
-  const options = utils.assign({}, defaults, params || {});
+  const options = utils.assign({}, defaults, parameters || {});
 
   // Nothing to do
   if (strippedLength <= maxLength) {
@@ -80,32 +80,32 @@ export function truncate(string, maxLength, params) {
   // Parse string
   for (i = 0; i < length; i++) {
     // Tag found
-    if (string[i] === '<' || tmpTag.length > 0) {
-      tmpTag += string[i];
+    if (string[i] === '<' || temporaryTag.length > 0) {
+      temporaryTag += string[i];
       // Closing Tag foung - remove last from open tags
-      if (string[i] === '>' && /<\//.test(tmpTag)) {
-        tmp += tmpTag;
-        lastTag = tmpTag;
-        tmpTag = '';
+      if (string[i] === '>' && /<\//.test(temporaryTag)) {
+        temporary += temporaryTag;
+        lastTag = temporaryTag;
+        temporaryTag = '';
         openTags.pop();
         // Tag found which closes itself - just append to string
-      } else if (string[i] === '>' && utils.isVoidElement(tmpTag)) {
-        tmp += tmpTag;
-        lastTag = tmpTag;
-        tmpTag = '';
+      } else if (string[i] === '>' && utils.isVoidElement(temporaryTag)) {
+        temporary += temporaryTag;
+        lastTag = temporaryTag;
+        temporaryTag = '';
         // Opening tag found
       } else if (string[i] === '>') {
-        tmp += tmpTag;
-        openTags.push(tmpTag);
-        lastTag = tmpTag;
-        tmpTag = '';
+        temporary += temporaryTag;
+        openTags.push(temporaryTag);
+        lastTag = temporaryTag;
+        temporaryTag = '';
       }
     } else {
-      tmpLength++;
-      tmp += string[i];
+      temporaryLength++;
+      temporary += string[i];
     }
 
-    let done = options.breakword && tmpLength === maxLength - elength;
+    let done = options.breakword && temporaryLength === maxLength - elength;
 
     if (!options.breakword) {
       let index = i;
@@ -129,24 +129,24 @@ export function truncate(string, maxLength, params) {
       } else {
         const rawpart = string.substring(
           index + 1,
-          whitespaces.find(index => index > i)
+          whitespaces.find((index) => index > i)
         );
         const part = utils.stripTags(rawpart);
         count = part.length;
       }
 
       // Check if we need ellipsis
-      let next = tmpLength + count - 1;
+      let next = temporaryLength + count - 1;
       if (next < strippedLength) {
         next += elength;
       }
 
       // Edge case
       // first word is already lomger than max length
-      if (tmpLength === 1 && next > maxLength) {
+      if (temporaryLength === 1 && next > maxLength) {
         possibleEnd = true;
-        tmpLength--;
-        tmp = tmp.substr(0, tmp.length - 1);
+        temporaryLength--;
+        temporary = temporary.substr(0, temporary.length - 1);
       }
 
       done = possibleEnd && next > maxLength;
@@ -156,16 +156,16 @@ export function truncate(string, maxLength, params) {
     if (done || i === length - 1) {
       // Starting point for next string
       if (string[i] === ' ') {
-        tmp = tmp.substr(0, tmp.length - 1);
-        tmpLength--;
+        temporary = temporary.substr(0, temporary.length - 1);
+        temporaryLength--;
       }
 
-      if (tmp.endsWith('>') && utils.isVoidElement(lastTag)) {
-        tmp = tmp.substring(0, tmp.lastIndexOf('<'));
+      if (temporary.endsWith('>') && utils.isVoidElement(lastTag)) {
+        temporary = temporary.substring(0, temporary.lastIndexOf('<'));
       }
 
-      if (openTags.length === 0 && options.ellipsis && tmp.length < string.length) {
-        tmp += options.ellipsis;
+      if (openTags.length === 0 && options.ellipsis && temporary.length < string.length) {
+        temporary += options.ellipsis;
       }
 
       // Add closing tags if applicable, push to result array and start over
@@ -176,15 +176,15 @@ export function truncate(string, maxLength, params) {
 
         // Append closing tag to part x
         if (j === openTags.length - 1 && options.ellipsis) {
-          tmp += options.ellipsis;
+          temporary += options.ellipsis;
         }
 
-        tmp += close;
+        temporary += close;
       }
 
       break;
     }
   }
 
-  return tmp;
+  return temporary;
 }

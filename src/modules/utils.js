@@ -64,12 +64,12 @@ const voidElements = [
 
 const breakElements = blockLevelElements.concat(voidElements);
 
-function canBreak(val) {
-  return breakElements.indexOf(val) !== -1;
+function canBreak(value) {
+  return breakElements.indexOf(value) !== -1;
 }
 
-function isVoid(val) {
-  return voidElements.indexOf(val) !== -1;
+function isVoid(value) {
+  return voidElements.indexOf(value) !== -1;
 }
 
 /**
@@ -126,8 +126,8 @@ export function canSplit(string, i) {
 
   // Or after closing respectively before opening an block level element
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
-  const strBefore = string.substr(0, i);
-  const strAfter = string.substr(i);
+  const stringBefore = string.substr(0, i);
+  const stringAfter = string.substr(i);
 
   // Save splitting can be done before and after whitespace ;)
   if (string[i] === ' ' || string[i - 1] === ' ') {
@@ -135,8 +135,10 @@ export function canSplit(string, i) {
   }
 
   // First check last character before using more expensive regex
-  const tagBefore = string[i - 1] === '>' && (strBefore.match(/<\/(\w+)\s*>$/m) || strBefore.match(/<(\w+)[^>]*\/>$/m));
-  const tagAfter = strAfter[0] === '<' && (strAfter.match(/^<(\w+)[^>]*>/m) || strAfter.match(/^<(\w+)[^>]*\/>/m));
+  const tagBefore =
+    string[i - 1] === '>' && (stringBefore.match(/<\/(\w+)\s*>$/m) || stringBefore.match(/<(\w+)[^>]*\/>$/m));
+  const tagAfter =
+    stringAfter[0] === '<' && (stringAfter.match(/^<(\w+)[^>]*>/m) || stringAfter.match(/^<(\w+)[^>]*\/>/m));
 
   return (tagBefore && canBreak(tagBefore[1])) || (tagAfter && canBreak(tagAfter[1]));
 }
@@ -188,9 +190,9 @@ export function stripTags(input, allowed) {
   const validTags = (
     String(allowed || '')
       .toLowerCase()
-      .match(/<[a-z][a-z0-9]*>/g) || []
+      .match(/<[a-z][a-z\d]*>/g) || []
   ).join('');
-  const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
+  const tags = /<\/?([a-z][a-z\d]*)\b[^>]*>/gi;
   const comments = /<!--[\s\S]*?-->/gi;
   const php = /<\?(?:php)?[\s\S]*?\?>/gi;
 

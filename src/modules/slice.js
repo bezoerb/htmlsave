@@ -4,13 +4,13 @@ const defaults = {
   breakword: true,
 };
 
-function getMax(val) {
-  if (utils.isArray(val)) {
-    const last = val[val.length - 1];
-    return drop => (drop && val.shift()) || val[0] || last;
+function getMax(value) {
+  if (utils.isArray(value)) {
+    const last = value[value.length - 1];
+    return (drop) => (drop && value.shift()) || value[0] || last;
   }
 
-  return () => val;
+  return () => value;
 }
 
 /**
@@ -23,24 +23,24 @@ function getMax(val) {
  * @param {Boolean} [params.breakword] flag to specify if words should be splitted, false by default
  * @return {Array} String parts
  */
-export function slice(string, maxLength, params) {
+export function slice(string, maxLength, parameters) {
   const results = [];
   const length = string.length;
-  let tmpLength = 0;
-  let tmp = '';
-  let tmpTag = '';
+  let temporaryLength = 0;
+  let temporary = '';
+  let temporaryTag = '';
   const openTags = [];
   const openTagsReverse = [];
   let ws = 0;
   let restString = string.replace(/<[^>]*>/gm, '');
   const max = getMax(maxLength);
-  const options = utils.assign({}, defaults, params || {});
+  const options = utils.assign({}, defaults, parameters || {});
 
   const whitespaces = utils.getWhitespaces(string);
 
   for (let i = 0; i < length; i++) {
     // Remember last whitespace
-    if ((i === 0 || string[i] === ' ') && tmpTag.length === 0 && !options.breakword) {
+    if ((i === 0 || string[i] === ' ') && temporaryTag.length === 0 && !options.breakword) {
       if (i > 0) {
         restString = string.substr(i + 1).replace(/<[^>]*>/gm, '');
       }
@@ -53,35 +53,35 @@ export function slice(string, maxLength, params) {
     }
 
     // Tag found
-    if (string[i] === '<' || tmpTag.length > 0) {
-      tmpTag += string[i];
+    if (string[i] === '<' || temporaryTag.length > 0) {
+      temporaryTag += string[i];
       // Closing Tag foung - remove last from open tags
-      if (string[i] === '>' && /<\//.test(tmpTag)) {
-        tmp += tmpTag;
-        tmpTag = '';
+      if (string[i] === '>' && /<\//.test(temporaryTag)) {
+        temporary += temporaryTag;
+        temporaryTag = '';
         openTags.pop();
         openTagsReverse.shift();
         // Void element tag found - just append to string
         // http://www.w3.org/TR/html-markup/syntax.html#void-element
-      } else if (string[i] === '>' && utils.isVoidElement(tmpTag)) {
-        tmp += tmpTag;
-        tmpTag = '';
+      } else if (string[i] === '>' && utils.isVoidElement(temporaryTag)) {
+        temporary += temporaryTag;
+        temporaryTag = '';
         // Opening tag found
       } else if (string[i] === '>') {
-        tmp += tmpTag;
-        openTags.push(tmpTag);
-        openTagsReverse.unshift(tmpTag.match(/<\s*(\w+)\s*/)[1]);
-        tmpTag = '';
+        temporary += temporaryTag;
+        openTags.push(temporaryTag);
+        openTagsReverse.unshift(temporaryTag.match(/<\s*(\w+)\s*/)[1]);
+        temporaryTag = '';
       }
     } else {
-      tmpLength++;
-      tmp += string[i];
+      temporaryLength++;
+      temporary += string[i];
     }
 
     // // check if we're inside a tag
-    const notag = !tmpTag;
+    const notag = !temporaryTag;
 
-    let cycleComplete = options.breakword && tmpLength >= max() && notag;
+    let cycleComplete = options.breakword && temporaryLength >= max() && notag;
 
     if (!options.breakword && notag) {
       let index = i;
@@ -98,19 +98,19 @@ export function slice(string, maxLength, params) {
             ? string.substring(index + 1, whitespaces[wsi + 1])
             : string.substring(index + 1);
         const part = utils.stripTags(rawpart);
-        cycleComplete = tmpLength + part.length > max();
+        cycleComplete = temporaryLength + part.length > max();
       }
     }
 
     // Prevent empty closing tags at the end
     if (cycleComplete && openTagsReverse[0]) {
       const closingRegexp = new RegExp('^</(' + openTagsReverse[0] + ')\\s*>');
-      const tmpMatch = string.substr(i + 1).match(closingRegexp);
-      cycleComplete &= !tmpMatch;
+      const temporaryMatch = string.substr(i + 1).match(closingRegexp);
+      cycleComplete &= !temporaryMatch;
     }
 
     // Break at whitespace if maxlength reached
-    if (cycleComplete || (i === string.length - 1 && tmpLength)) {
+    if (cycleComplete || (i === string.length - 1 && temporaryLength)) {
       let tmpnew = '';
 
       // Decrease max
@@ -122,15 +122,15 @@ export function slice(string, maxLength, params) {
         const type = tag.match(/<\s*(\w+)\s*/)[1];
 
         // Append closing tag to part x
-        tmp += '</' + type + '>';
+        temporary += '</' + type + '>';
 
         // Prepend opening tag to part x+1
         tmpnew = tag + tmpnew;
       }
 
-      results.push(tmp);
-      tmp = tmpnew;
-      tmpLength = 0;
+      results.push(temporary);
+      temporary = tmpnew;
+      temporaryLength = 0;
     }
   }
 
