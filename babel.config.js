@@ -1,5 +1,6 @@
 const {NODE_ENV} = process.env;
 
+// eslint-disable-next-line unicorn/prefer-module
 module.exports = {
   presets: [
     [
@@ -7,7 +8,7 @@ module.exports = {
       {
         targets: {
           browsers: ['> 5%'],
-          node: '8.6',
+          node: '12',
         },
         exclude: ['transform-async-to-generator', 'transform-regenerator'],
         modules: false,

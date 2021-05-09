@@ -7,10 +7,10 @@
  * http://bezoerb.mit-license.org/
  * All rights reserved.
  */
-import {assign, canSplit, isArray, isVoidElement, stripTags} from './modules/utils';
+import {assign, canSplit, isArray, isVoidElement, stripTags} from './modules/utils.js';
 
-export {slice} from './modules/slice';
-export {truncate} from './modules/truncate';
+export {slice} from './modules/slice.js';
+export {truncate} from './modules/truncate.js';
 
 export const utils = {
   assign,

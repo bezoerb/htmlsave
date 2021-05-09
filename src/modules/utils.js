@@ -62,7 +62,7 @@ const voidElements = [
   'wbr',
 ];
 
-const breakElements = blockLevelElements.concat(voidElements);
+const breakElements = [...blockLevelElements, ...voidElements];
 
 function canBreak(value) {
   return breakElements.indexOf(value) !== -1;
