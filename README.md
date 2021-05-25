@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![BrowserStack Status][browserstack-image]][browserstack-url] [![Dependency Status][depstat-image]][depstat-url] [![Download][dlcounter-image]][dlcounter-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
-HTML save string utilities for JavaScript.
+HTML safe string utilities for JavaScript.
 
 ## Features
 
